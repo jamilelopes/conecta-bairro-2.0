@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { getProfessionals } from "../services/professionalsService";
+import ProfessionalCard from "../components/ProfessionalCard";
 
 const mockProfessionals = [
   { name: "Ricardo Oliveira", role: "Especialista em Reformas", loc: "São Paulo, SP", slug: "ricardo-oliveira" },
@@ -73,31 +74,11 @@ function Explore() {
             <p className="text-on-surface-variant">Carregando...</p>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-              {professionals.map((pro) => (
-                <div
-                  key={pro.slug}
-                  className="group bg-surface-container-lowest rounded-2xl p-5 border border-transparent hover:border-slate-100 transition-all duration-300 hover:shadow-xl flex flex-col"
-                >
-                  <div className="relative h-56 mb-5 overflow-hidden rounded-xl bg-surface-container flex items-center justify-center text-on-surface-variant text-sm">
-                    Foto
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-[10px] font-bold text-primary uppercase tracking-widest mb-1.5">{pro.role}</p>
-                    <h3 className="font-headline font-bold text-lg text-on-surface mb-1">{pro.name}</h3>
-                    <div className="flex items-center gap-1.5 text-slate-500 mb-4">
-                      <span className="text-xs font-medium">{pro.loc}</span>
-                    </div>
-                  </div>
-                  <div className="pt-4 border-t border-slate-50 flex items-center justify-end">
-                    <button
-                      onClick={() => navigate(`/profile/${pro.slug}`)}
-                      className="bg-primary text-white text-sm font-bold py-2.5 px-5 rounded-xl hover:bg-primary-container shadow-md"
-                    >
-                      Ver Perfil
-                    </button>
-                  </div>
-                </div>
-              ))}
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+                {professionals.map((pro) => (
+                  <ProfessionalCard key={pro.slug} professional={pro} />
+                ))}
+              </div>
             </div>
           )}
         </main>
