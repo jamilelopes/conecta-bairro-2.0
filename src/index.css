@@ -42,3 +42,7 @@
 body {
   font-family: "Inter", sans-serif;
 }
+.glass-nav {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+}
