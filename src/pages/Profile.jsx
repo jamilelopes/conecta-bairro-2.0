@@ -83,8 +83,9 @@ function Profile() {
                 <div className="flex-grow text-center md:text-left">
                   <div className="flex flex-col md:flex-row items-center gap-3 mb-2">
                     <h1 className="text-4xl font-extrabold tracking-tight text-on-surface">{professional.name}</h1>
-                      <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold">
-                        Profissional Verificado
+                      <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                      <span className="material-symbols-outlined text-sm" aria-hidden="true">verified</span>
+                       Profissional Verificado
                       </span>
                   </div>
                   <p className="text-xl font-semibold text-on-surface-variant mb-2">{professional.title}</p>

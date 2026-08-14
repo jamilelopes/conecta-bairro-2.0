@@ -21,6 +21,7 @@ function ProfessionalCard({ professional }) {
         <p className="text-[10px] font-bold text-primary uppercase tracking-widest mb-1.5">{professional.title}</p>
         <h3 className="font-headline font-bold text-lg text-on-surface mb-1">{professional.name}</h3>
         <div className="flex items-center gap-1.5 text-slate-500 mb-4">
+          <span className="material-symbols-outlined text-sm" aria-hidden="true">location_on</span>
           <span className="text-xs font-medium">{location}</span>
         </div>
       </div>

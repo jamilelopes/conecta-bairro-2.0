@@ -21,24 +21,26 @@ function Home() {
                 De reformas residenciais a consultoria de TI, encontre especialistas selecionados para transformar seus projetos em realidade.
               </p>
               <div className="bg-surface-container-lowest p-2 rounded-2xl shadow-lg flex flex-col md:flex-row gap-2 max-w-2xl">
-                <div className="flex-1 flex items-center px-4 gap-3 bg-surface-container-low rounded-xl py-3">
-                  <label htmlFor="home-category" className="sr-only">Qual categoria você procura</label>
-                  <input
-                    id="home-category"
-                   className="bg-transparent border-none focus:ring-0 w-full outline-none"
-                   placeholder="Qual categoria?"
-                    type="text"
-                  />
-                </div>
-                <div className="flex-1 flex items-center px-4 gap-3 bg-surface-container-low rounded-xl py-3">
-                  <label htmlFor="home-location" className="sr-only">Sua localização</label>
-                  <input
-                   id="home-location"
-                   className="bg-transparent border-none focus:ring-0 w-full outline-none"
-                   placeholder="Sua localização"
-                    type="text"
-                   />
-                </div>
+              <div className="flex-1 flex items-center px-4 gap-3 bg-surface-container-low rounded-xl py-3">
+                <span className="material-symbols-outlined text-outline" aria-hidden="true">search</span>
+                <label htmlFor="home-category" className="sr-only">Qual categoria você procura</label>
+                <input
+                  id="home-category"
+                  className="bg-transparent border-none focus:ring-0 w-full outline-none"
+                  placeholder="Qual categoria?"
+                  type="text"
+                />
+              </div>
+              <div className="flex-1 flex items-center px-4 gap-3 bg-surface-container-low rounded-xl py-3">
+                <span className="material-symbols-outlined text-outline" aria-hidden="true">location_on</span>
+                <label htmlFor="home-location" className="sr-only">Sua localização</label>
+                <input
+                  id="home-location"
+                  className="bg-transparent border-none focus:ring-0 w-full outline-none"
+                  placeholder="Sua localização"
+                  type="text"
+                />
+              </div>
                 <button
                   onClick={() => navigate("/explore")}
                   className="bg-secondary-container text-on-secondary-container px-8 py-4 rounded-xl font-bold text-lg hover:scale-[0.98] transition-transform"
@@ -72,6 +74,9 @@ function Home() {
                 onClick={() => navigate("/explore")}
                 className="group bg-surface-container-low p-8 rounded-3xl hover:bg-primary-container transition-all cursor-pointer"
               >
+                <div className="w-16 h-16 bg-surface-container-lowest rounded-2xl flex items-center justify-center mx-auto mb-6">
+                  <span className="material-symbols-outlined text-3xl text-primary group-hover:text-white transition-colors" aria-hidden="true">home_repair_service</span>
+                </div>
                 <span className="font-bold group-hover:text-white transition-colors">{cat}</span>
               </div>
             ))}

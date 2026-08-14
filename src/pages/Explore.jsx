@@ -39,7 +39,7 @@ function Explore() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar />
+      <Navbar isLoggedIn={true} />
       <div className="flex pt-20">
         <aside className="w-[300px] h-[calc(100vh-80px)] fixed left-0 overflow-y-auto border-r border-slate-200/50 bg-white p-8 hidden md:block">
           <h2 className="font-headline font-bold text-lg mb-8 tracking-tight">Filtros</h2>
