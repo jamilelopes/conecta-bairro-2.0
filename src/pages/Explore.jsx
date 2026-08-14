@@ -11,6 +11,8 @@ const mockProfessionals = [
   { name: "André Costa", role: "Pintura Comercial", loc: "Rio de Janeiro, RJ", slug: "andre-costa" },
 ];
 
+const categorias = ["Reformas", "Aulas", "Beleza", "Tecnologia", "Eventos", "Servicos Gerais"];
+
 function Explore() {
   const [professionals, setProfessionals] = useState(mockProfessionals);
   const [loading, setLoading] = useState(true);
@@ -34,30 +36,30 @@ function Explore() {
       <div className="flex pt-20">
         <aside className="w-[300px] h-[calc(100vh-80px)] fixed left-0 overflow-y-auto border-r border-slate-200/50 bg-white p-8 hidden md:block">
           <h2 className="font-headline font-bold text-lg mb-8 tracking-tight">Filtros</h2>
+
           <div className="mb-8">
             <span className="text-sm font-semibold block mb-4">Categorias</span>
-            {["Reformas", "Aulas", "Beleza", "Tecnologia", "Eventos", "Serviços Gerais"].map((c) => (
-              <label key={c} className="flex items-center gap-3 mb-3 cursor-pointer group">
-                <input type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary" defaultChecked={c === "Reformas"} />
-                <span className="text-sm text-on-surface-variant group-hover:text-on-surface">{c}</span>
-              </label>
+            {categorias.map((c) => (
+              <div key={c} className="flex items-center gap-3 mb-3">
+                <input id={"cat-" + c} type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary" defaultChecked={c === "Reformas"} />
+                <label htmlFor={"cat-" + c} className="text-sm text-on-surface-variant cursor-pointer">{c}</label>
+              </div>
             ))}
           </div>
+
           <div className="mb-8">
-            <span className="text-sm font-semibold block mb-4">Estado</span>
-            <select className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-sm">
+            <label htmlFor="state-filter" className="text-sm font-semibold block mb-4">Estado</label>
+            <select id="state-filter" className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-sm">
               <option>Todos os Estados</option>
-              <option>São Paulo</option>
+              <option>Sao Paulo</option>
             </select>
           </div>
+
           <div className="mb-8">
-            <span className="text-sm font-semibold block mb-4">Cidade</span>
-            <input
-              type="text"
-              placeholder="Digite a cidade..."
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-sm"
-            />
+            <label htmlFor="city-filter" className="text-sm font-semibold block mb-4">Cidade</label>
+            <input id="city-filter" type="text" placeholder="Digite a cidade..." className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2.5 px-4 text-sm" />
           </div>
+
           <button className="w-full text-sm font-semibold text-primary border border-primary/30 rounded-full py-2.5 hover:bg-primary/5 transition-colors">
             Limpar filtros
           </button>
@@ -71,7 +73,7 @@ function Explore() {
               </h1>
               <p className="text-on-surface-variant text-sm font-medium">
                 {professionals.length} profissionais encontrados
-                {usingMock && " (dados de exemplo — back-end indisponível)"}
+                {usingMock ? " (dados de exemplo - back-end indisponivel)" : ""}
               </p>
             </div>
           </div>
