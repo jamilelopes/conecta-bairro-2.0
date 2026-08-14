@@ -102,8 +102,7 @@ function Settings() {
                     type="button"
                     onClick={handlePhotoClick}
                     aria-label="Trocar foto de perfil"
-                    className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shadow-md"
-                  >
+className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shadow-md cursor-pointer"                  >
                     <span className="material-symbols-outlined text-base" aria-hidden="true">photo_camera</span>
                   </button>
                   <input
