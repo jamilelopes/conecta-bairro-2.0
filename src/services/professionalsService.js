@@ -23,8 +23,16 @@ export async function getProfessionalBySlug(slug) {
 export async function getCategories() {
   const response = await fetch(`${API_BASE_URL}/categories`);
   if (!response.ok) throw new Error("Erro ao buscar categorias");
+  const result = await response.json();
+  return result.data;
+}
+
+export async function getMyProfile() {
+  const response = await fetch(`${API_BASE_URL}/professionals/me`);
+  if (!response.ok) throw new Error("Erro ao buscar perfil");
   return response.json();
 }
+
 export async function updateMyProfile(data) {
   const response = await fetch(`${API_BASE_URL}/professionals/me`, {
     method: "PUT",
@@ -32,10 +40,5 @@ export async function updateMyProfile(data) {
     body: JSON.stringify(data),
   });
   if (!response.ok) throw new Error("Erro ao salvar perfil");
-  return response.json();
-}
-export async function getMyProfile() {
-  const response = await fetch(`${API_BASE_URL}/professionals/me`);
-  if (!response.ok) throw new Error("Erro ao buscar perfil");
   return response.json();
 }
