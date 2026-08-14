@@ -1,30 +1,60 @@
 import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { getProfessionalBySlug } from "../services/professionalsService";
+
+const mockProfessional = {
+  name: "Marcos Silva",
+  role: "Arquiteto e Reformas",
+  registration: "CAU-A123456-7",
+  address: "Rua Cardeal Arcoverde, 1234, Pinheiros, São Paulo, SP",
+  about: "Profissional especializado em reformas residenciais e comerciais com foco em funcionalidade e estetica contemporanea. Mais de 10 anos de experiencia no mercado paulistano.",
+  instagram: "marcos_arq",
+  site: "marcossilva.arq.br",
+  phone: "5511991234567",
+};
 
 function Profile() {
   const { slug } = useParams();
+  const [professional, setProfessional] = useState(mockProfessional);
+  const [loading, setLoading] = useState(true);
+  const [usingMock, setUsingMock] = useState(false);
 
-  const professional = {
-    name: "Marcos Silva",
-    role: "Arquiteto e Reformas",
-    registration: "CAU-A123456-7",
-    address: "Rua Cardeal Arcoverde, 1234, Pinheiros, São Paulo, SP",
-    about: "Profissional especializado em reformas residenciais e comerciais com foco em funcionalidade e estética contemporânea. Mais de 10 anos de experiência no mercado paulistano.",
-    instagram: "marcos_arq",
-    site: "marcossilva.arq.br",
-    phone: "5511991234567",
-  };
+  useEffect(() => {
+    getProfessionalBySlug(slug)
+      .then((data) => {
+        setProfessional(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setUsingMock(true);
+        setLoading(false);
+      });
+  }, [slug]);
 
   const whatsappMessage = encodeURIComponent(
     "Ola " + professional.name + ", vi seu perfil no Conecta Bairro e gostaria de solicitar um orcamento."
   );
   const whatsappLink = "https://api.whatsapp.com/send?phone=" + professional.phone + "&text=" + whatsappMessage;
 
+  if (loading) {
+    return (
+      <div className="bg-surface min-h-screen flex items-center justify-center">
+        <p className="text-on-surface-variant">Carregando...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-surface text-on-surface min-h-screen flex flex-col">
       <Navbar />
       <div className="flex-grow pt-28 pb-24">
+        {usingMock && (
+          <p className="text-center text-xs text-on-surface-variant mb-6">
+            (dados de exemplo - back-end indisponivel)
+          </p>
+        )}
         <div className="max-w-screen-2xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8">
           <main className="space-y-8">
             <section className="rounded-2xl overflow-hidden shadow-sm border border-surface-container-high py-12 px-8 bg-primary-container/10">

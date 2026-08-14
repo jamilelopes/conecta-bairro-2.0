@@ -24,3 +24,12 @@ export async function getCategories() {
   if (!response.ok) throw new Error("Erro ao buscar categorias");
   return response.json();
 }
+export async function updateMyProfile(data) {
+  const response = await fetch(`${API_BASE_URL}/professionals/me`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) throw new Error("Erro ao salvar perfil");
+  return response.json();
+}
