@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ProfessionalCard from "../components/ProfessionalCard";
-import { getProfessionals } from "../services/professionalsService";
+import { getProfessionals, getCategories } from "../services/professionalsService";
 
 const mockProfessionals = [
   { name: "Marcos Silva", role: "Arquiteto e Reformas", loc: "São Paulo, SP", slug: "marcos-silva" },
@@ -11,17 +11,24 @@ const mockProfessionals = [
   { name: "André Costa", role: "Pintura Comercial", loc: "Rio de Janeiro, RJ", slug: "andre-costa" },
 ];
 
-const categorias = ["Reformas", "Aulas", "Beleza", "Tecnologia", "Eventos", "Servicos Gerais"];
+const mockCategories = [
+  { id: "cat-001", name: "Reparos Residenciais", slug: "reparos-residenciais" },
+  { id: "cat-002", name: "Limpeza", slug: "limpeza" },
+  { id: "cat-003", name: "Encanamento", slug: "encanamento" },
+  { id: "cat-004", name: "Eletricidade", slug: "eletricidade" },
+];
 
 function Explore() {
   const [professionals, setProfessionals] = useState(mockProfessionals);
+  const [categories, setCategories] = useState(mockCategories);
   const [loading, setLoading] = useState(true);
   const [usingMock, setUsingMock] = useState(false);
 
   useEffect(() => {
-    getProfessionals()
-      .then((data) => {
-        setProfessionals(data);
+    Promise.all([getProfessionals(), getCategories()])
+      .then(([professionalsData, categoriesData]) => {
+        setProfessionals(professionalsData);
+        setCategories(categoriesData);
         setLoading(false);
       })
       .catch(() => {
@@ -39,10 +46,10 @@ function Explore() {
 
           <div className="mb-8">
             <span className="text-sm font-semibold block mb-4">Categorias</span>
-            {categorias.map((c) => (
-              <div key={c} className="flex items-center gap-3 mb-3">
-                <input id={"cat-" + c} type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary" defaultChecked={c === "Reformas"} />
-                <label htmlFor={"cat-" + c} className="text-sm text-on-surface-variant cursor-pointer">{c}</label>
+            {categories.map((c) => (
+              <div key={c.id} className="flex items-center gap-3 mb-3">
+                <input id={"cat-" + c.id} type="checkbox" className="w-5 h-5 rounded border-slate-300 text-primary" />
+                <label htmlFor={"cat-" + c.id} className="text-sm text-on-surface-variant cursor-pointer">{c.name}</label>
               </div>
             ))}
           </div>
@@ -69,7 +76,7 @@ function Explore() {
           <div className="flex items-end justify-between mb-10">
             <div>
               <h1 className="font-headline font-extrabold text-3xl text-on-surface tracking-tight mb-2">
-                Reformas
+                Profissionais
               </h1>
               <p className="text-on-surface-variant text-sm font-medium">
                 {professionals.length} profissionais encontrados
@@ -80,6 +87,8 @@ function Explore() {
 
           {loading ? (
             <p className="text-on-surface-variant">Carregando...</p>
+          ) : professionals.length === 0 ? (
+            <p className="text-on-surface-variant">Nenhum profissional encontrado ainda.</p>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
               {professionals.map((pro) => (
