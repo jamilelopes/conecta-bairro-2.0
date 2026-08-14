@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import { getMyProfile, updateMyProfile } from "../services/professionalsService";
 
 const mockProfile = {
@@ -15,6 +16,7 @@ const mockProfile = {
   description: "Profissional especializado em reformas residenciais e comerciais com foco em funcionalidade e estetica contemporanea. Mais de 10 anos de experiencia no mercado paulistano.",
   instagram: "@marcos_arq",
   website: "marcossilva.arq.br",
+  avatar_url: "https://randomuser.me/api/portraits/med/men/32.jpg",
 };
 
 function Settings() {
@@ -22,6 +24,7 @@ function Settings() {
   const [usingMock, setUsingMock] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     getMyProfile()
@@ -31,6 +34,18 @@ function Settings() {
 
   function handleChange(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
+  }
+
+  function handlePhotoClick() {
+    fileInputRef.current?.click();
+  }
+
+  function handlePhotoChange(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const previewUrl = URL.createObjectURL(file);
+    handleChange("avatar_url", previewUrl);
+    // TODO: no futuro, enviar o arquivo de verdade para o back-end (upload real)
   }
 
   function handleSubmit(e) {
@@ -46,7 +61,9 @@ function Settings() {
   return (
     <div className="bg-surface text-on-surface min-h-screen">
       <header className="fixed top-0 w-full z-50 glass-nav shadow-sm h-20 flex items-center px-8">
-        <span className="text-2xl font-bold tracking-tight text-primary font-headline">CONECTA BAIRRO</span>
+        <Link to="/" className="text-2xl font-bold tracking-tight text-primary font-headline">
+          CONECTA BAIRRO
+        </Link>
       </header>
       <main className="pt-28 pb-20 px-4 md:px-8 max-w-[1440px] mx-auto">
         <div className="flex flex-col md:flex-row gap-8">
@@ -54,24 +71,65 @@ function Settings() {
             <div className="sticky top-28 space-y-2">
               <h1 className="font-headline text-2xl font-bold mb-6 tracking-tight px-4">Configurações</h1>
               <a className="flex items-center gap-3 px-4 py-3.5 rounded-2xl bg-primary-container text-white shadow-lg" href="#" aria-current="page">
+                <span className="material-symbols-outlined" aria-hidden="true">person</span>
                 <span className="font-semibold">Dados Pessoais</span>
               </a>
+
+              <div className="mt-8 flex items-center gap-3 px-4">
+                <img
+                  src={form.avatar_url || "https://ui-avatars.com/api/?name=" + encodeURIComponent(form.name)}
+                  alt={"Foto de " + form.name}
+                  className="w-12 h-12 rounded-full object-cover"
+                />
+                <div>
+                  <p className="font-semibold text-sm">{form.name}</p>
+                  <p className="text-xs text-on-surface-variant">{form.title}</p>
+                </div>
+              </div>
             </div>
           </nav>
 
           <section className="flex-grow space-y-8" aria-labelledby="settings-heading">
             <div className="bg-surface-container-lowest rounded-3xl p-8 shadow-sm">
-              <h2 id="settings-heading" className="font-headline text-3xl font-bold tracking-tight mb-2">Dados Profissionais</h2>
-              <p className="text-sm text-on-surface-variant mb-2">
-                Mantenha suas informações atualizadas para garantir a conformidade do seu cadastro.
-              </p>
+              <div className="flex items-center gap-6 mb-8">
+                <div className="relative">
+                  <img
+                    src={form.avatar_url || "https://ui-avatars.com/api/?name=" + encodeURIComponent(form.name)}
+                    alt={"Foto de " + form.name}
+                    className="w-20 h-20 rounded-full object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={handlePhotoClick}
+                    aria-label="Trocar foto de perfil"
+                    className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shadow-md"
+                  >
+                    <span className="material-symbols-outlined text-base" aria-hidden="true">photo_camera</span>
+                  </button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handlePhotoChange}
+                    className="hidden"
+                  />
+                </div>
+                <div>
+                  <h2 id="settings-heading" className="font-headline text-3xl font-bold tracking-tight">Dados Profissionais</h2>
+                  <p className="text-sm text-on-surface-variant">
+                    Mantenha suas informações atualizadas para garantir a conformidade do seu cadastro.
+                  </p>
+                </div>
+              </div>
+
               {usingMock && (
                 <p className="text-xs text-on-surface-variant mb-6">(dados de exemplo - back-end indisponível)</p>
               )}
 
               <form className="space-y-8" onSubmit={handleSubmit}>
                 <fieldset>
-                  <legend className="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4">
+                  <legend className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4">
+                    <span className="material-symbols-outlined text-base" aria-hidden="true">badge</span>
                     Informações Principais
                   </legend>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
@@ -91,7 +149,10 @@ function Settings() {
                 </fieldset>
 
                 <fieldset className="pt-8 border-t border-slate-100">
-                  <legend className="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4">Endereço</legend>
+                  <legend className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4">
+                    <span className="material-symbols-outlined text-base" aria-hidden="true">location_on</span>
+                    Endereço
+                  </legend>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 mb-6">
                     <div className="space-y-2">
                       <label htmlFor="state" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Estado</label>
@@ -102,8 +163,8 @@ function Settings() {
                       <input id="city" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.city} onChange={(e) => handleChange("city", e.target.value)} />
                     </div>
                     <div className="space-y-2">
-                      <label htmlFor="neighborhood" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Bairro</label>
-                      <input id="neighborhood" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.district} onChange={(e) => handleChange("neighborhood", e.target.value)} />
+                      <label htmlFor="district" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Bairro</label>
+                      <input id="district" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.district} onChange={(e) => handleChange("district", e.target.value)} />
                     </div>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
@@ -119,20 +180,23 @@ function Settings() {
                 </fieldset>
 
                 <fieldset className="pt-8 border-t border-slate-100">
-                  <legend className="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4">Dados Profissionais</legend>
+                  <legend className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4">
+                    <span className="material-symbols-outlined text-base" aria-hidden="true">work</span>
+                    Dados Profissionais
+                  </legend>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 mb-6">
                     <div className="space-y-2">
-                      <label htmlFor="role" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Título / Profissão</label>
-                      <input id="role" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.title} onChange={(e) => handleChange("role", e.target.value)} />
+                      <label htmlFor="title" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Título / Profissão</label>
+                      <input id="title" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.title} onChange={(e) => handleChange("title", e.target.value)} />
                     </div>
                     <div className="space-y-2">
-                      <label htmlFor="registration" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Registro Profissional</label>
-                      <input id="registration" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.registration_number} onChange={(e) => handleChange("registration", e.target.value)} />
+                      <label htmlFor="registration_number" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Registro Profissional</label>
+                      <input id="registration_number" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.registration_number} onChange={(e) => handleChange("registration_number", e.target.value)} />
                     </div>
                   </div>
                   <div className="space-y-2 mb-6">
-                    <label htmlFor="about" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Sobre Você</label>
-                    <textarea id="about" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50 min-h-24" value={form.description} onChange={(e) => handleChange("about", e.target.value)} />
+                    <label htmlFor="description" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Sobre Você</label>
+                    <textarea id="description" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50 min-h-24" value={form.description} onChange={(e) => handleChange("description", e.target.value)} />
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                     <div className="space-y-2">
@@ -140,8 +204,8 @@ function Settings() {
                       <input id="instagram" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.instagram} onChange={(e) => handleChange("instagram", e.target.value)} />
                     </div>
                     <div className="space-y-2">
-                      <label htmlFor="site" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Site</label>
-                      <input id="site" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.website} onChange={(e) => handleChange("site", e.target.value)} />
+                      <label htmlFor="website" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Site</label>
+                      <input id="website" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.website} onChange={(e) => handleChange("website", e.target.value)} />
                     </div>
                   </div>
                 </fieldset>
