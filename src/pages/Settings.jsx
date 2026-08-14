@@ -7,14 +7,14 @@ const mockProfile = {
   phone: "(11) 99123-4567",
   state: "SP",
   city: "São Paulo",
-  neighborhood: "Pinheiros",
+  district: "Pinheiros",
   street: "Rua Cardeal Arcoverde",
   number: "1234",
-  role: "Arquiteto e Reformas",
-  registration: "CAU-A123456-7",
-  about: "Profissional especializado em reformas residenciais e comerciais com foco em funcionalidade e estetica contemporanea. Mais de 10 anos de experiencia no mercado paulistano.",
+  title: "Arquiteto e Reformas",
+  registration_number: "CAU-A123456-7",
+  description: "Profissional especializado em reformas residenciais e comerciais com foco em funcionalidade e estetica contemporanea. Mais de 10 anos de experiencia no mercado paulistano.",
   instagram: "@marcos_arq",
-  site: "marcossilva.arq.br",
+  website: "marcossilva.arq.br",
 };
 
 function Settings() {
@@ -103,7 +103,7 @@ function Settings() {
                     </div>
                     <div className="space-y-2">
                       <label htmlFor="neighborhood" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Bairro</label>
-                      <input id="neighborhood" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.neighborhood} onChange={(e) => handleChange("neighborhood", e.target.value)} />
+                      <input id="neighborhood" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.district} onChange={(e) => handleChange("neighborhood", e.target.value)} />
                     </div>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
@@ -123,16 +123,16 @@ function Settings() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 mb-6">
                     <div className="space-y-2">
                       <label htmlFor="role" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Título / Profissão</label>
-                      <input id="role" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.role} onChange={(e) => handleChange("role", e.target.value)} />
+                      <input id="role" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.title} onChange={(e) => handleChange("role", e.target.value)} />
                     </div>
                     <div className="space-y-2">
                       <label htmlFor="registration" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Registro Profissional</label>
-                      <input id="registration" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.registration} onChange={(e) => handleChange("registration", e.target.value)} />
+                      <input id="registration" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.registration_number} onChange={(e) => handleChange("registration", e.target.value)} />
                     </div>
                   </div>
                   <div className="space-y-2 mb-6">
                     <label htmlFor="about" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Sobre Você</label>
-                    <textarea id="about" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50 min-h-24" value={form.about} onChange={(e) => handleChange("about", e.target.value)} />
+                    <textarea id="about" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50 min-h-24" value={form.description} onChange={(e) => handleChange("about", e.target.value)} />
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                     <div className="space-y-2">
@@ -141,7 +141,7 @@ function Settings() {
                     </div>
                     <div className="space-y-2">
                       <label htmlFor="site" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Site</label>
-                      <input id="site" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.site} onChange={(e) => handleChange("site", e.target.value)} />
+                      <input id="site" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.website} onChange={(e) => handleChange("site", e.target.value)} />
                     </div>
                   </div>
                 </fieldset>
