@@ -10,7 +10,8 @@ export async function getProfessionals(filters = {}) {
   const params = new URLSearchParams(filters);
   const response = await fetch(`${API_BASE_URL}/professionals?${params}`);
   if (!response.ok) throw new Error("Erro ao buscar profissionais");
-  return response.json();
+  const result = await response.json();
+  return result.data;
 }
 
 export async function getProfessionalBySlug(slug) {
