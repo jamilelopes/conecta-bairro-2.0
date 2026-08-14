@@ -1,0 +1,23 @@
+#lista de bibliotecas
+flask
+flask-cors
+flask-sqlalchemy
+flask-migrate
+pymysql
+python-dotenv
+PyJWT
+google-auth
+
+#             node.js
+
+#https://nodejs.org/dist/v24.15.0/node-v24.15.0-x64.msi
+
+#comandos para o node no terminal:
+#cd frontend
+#npm install
+#npm run api:generate
+#npm run dev
+#abrir o link de localhost gerado para acessar o frontend
+
+#MySQL Community Server
+#MySQL Workbench

@@ -25,12 +25,12 @@ function Footer() {
         <div className="flex flex-col">
           <h4 className="text-xs font-bold text-on-surface uppercase tracking-widest mb-6">Newsletter</h4>
           <form className="flex" onSubmit={(e) => e.preventDefault()}>
-  <label htmlFor="newsletter-email" className="sr-only">Seu melhor e-mail</label>
-  <input id="newsletter-email" className="bg-white border border-slate-200 rounded-l-xl px-4 py-2.5 text-xs w-full focus:outline-none focus:ring-1 focus:ring-primary/20" placeholder="Seu melhor e-mail" type="email" />
-  <button type="submit" aria-label="Inscrever-se na newsletter" className="bg-primary text-white px-5 py-2.5 rounded-r-xl transition-all hover:bg-primary-container">
-    →
-  </button>
-</form>
+            <label htmlFor="newsletter-email" className="sr-only">Seu melhor e-mail</label>
+            <input id="newsletter-email" className="bg-white border border-slate-200 rounded-l-xl px-4 py-2.5 text-xs w-full focus:outline-none focus:ring-1 focus:ring-primary/20" placeholder="Seu melhor e-mail" type="email" />
+            <button type="submit" aria-label="Inscrever-se na newsletter" className="bg-primary text-white px-5 py-2.5 rounded-r-xl transition-all hover:bg-primary-container">
+               →
+              </button>
+            </form>
         </div>
       </div>
       <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-slate-200/50 flex justify-between items-center">

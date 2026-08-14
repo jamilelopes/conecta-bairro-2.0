@@ -22,18 +22,22 @@ function Home() {
               </p>
               <div className="bg-surface-container-lowest p-2 rounded-2xl shadow-lg flex flex-col md:flex-row gap-2 max-w-2xl">
                 <div className="flex-1 flex items-center px-4 gap-3 bg-surface-container-low rounded-xl py-3">
+                  <label htmlFor="home-category" className="sr-only">Qual categoria você procura</label>
                   <input
-                    className="bg-transparent border-none focus:ring-0 w-full outline-none"
-                    placeholder="Qual categoria?"
+                    id="home-category"
+                   className="bg-transparent border-none focus:ring-0 w-full outline-none"
+                   placeholder="Qual categoria?"
                     type="text"
                   />
                 </div>
                 <div className="flex-1 flex items-center px-4 gap-3 bg-surface-container-low rounded-xl py-3">
+                  <label htmlFor="home-location" className="sr-only">Sua localização</label>
                   <input
-                    className="bg-transparent border-none focus:ring-0 w-full outline-none"
-                    placeholder="Sua localização"
+                   id="home-location"
+                   className="bg-transparent border-none focus:ring-0 w-full outline-none"
+                   placeholder="Sua localização"
                     type="text"
-                  />
+                   />
                 </div>
                 <button
                   onClick={() => navigate("/explore")}
@@ -45,8 +49,8 @@ function Home() {
             </div>
 
             <div className="w-full md:w-1/2 relative">
-              <div className="relative w-full aspect-square rounded-[2rem] bg-surface-container-high flex items-center justify-center text-on-surface-variant shadow-2xl">
-                Foto
+              <div role="img" aria-label="Foto ilustrativa de um profissional trabalhando" className="relative w-full aspect-square rounded-[2rem] bg-surface-container-high flex items-center justify-center text-on-surface-variant shadow-2xl">
+              Foto
               </div>
               <div className="absolute -bottom-4 left-4 bg-surface-container-lowest rounded-2xl shadow-lg p-4 flex items-center gap-3">
                 <span className="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-lg">✓</span>
