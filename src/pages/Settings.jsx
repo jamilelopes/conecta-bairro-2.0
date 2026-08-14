@@ -50,18 +50,18 @@ function Settings() {
       </header>
       <main className="pt-28 pb-20 px-4 md:px-8 max-w-[1440px] mx-auto">
         <div className="flex flex-col md:flex-row gap-8">
-          <aside className="w-full md:w-80 shrink-0">
+          <nav aria-label="Menu de configurações" className="w-full md:w-80 shrink-0">
             <div className="sticky top-28 space-y-2">
               <h1 className="font-headline text-2xl font-bold mb-6 tracking-tight px-4">Configurações</h1>
-              <a className="flex items-center gap-3 px-4 py-3.5 rounded-2xl bg-primary-container text-white shadow-lg" href="#">
+              <a className="flex items-center gap-3 px-4 py-3.5 rounded-2xl bg-primary-container text-white shadow-lg" href="#" aria-current="page">
                 <span className="font-semibold">Dados Pessoais</span>
               </a>
             </div>
-          </aside>
+          </nav>
 
-          <section className="flex-grow space-y-8">
+          <section className="flex-grow space-y-8" aria-labelledby="settings-heading">
             <div className="bg-surface-container-lowest rounded-3xl p-8 shadow-sm">
-              <h2 className="font-headline text-3xl font-bold tracking-tight mb-2">Dados Profissionais</h2>
+              <h2 id="settings-heading" className="font-headline text-3xl font-bold tracking-tight mb-2">Dados Profissionais</h2>
               <p className="text-sm text-on-surface-variant mb-2">
                 Mantenha suas informações atualizadas para garantir a conformidade do seu cadastro.
               </p>
@@ -70,84 +70,84 @@ function Settings() {
               )}
 
               <form className="space-y-8" onSubmit={handleSubmit}>
-                <div>
-                  <h3 className="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4">
+                <fieldset>
+                  <legend className="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4">
                     Informações Principais
-                  </h3>
+                  </legend>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                     <div className="space-y-2">
-                      <label className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Nome Completo</label>
-                      <input className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.name} onChange={(e) => handleChange("name", e.target.value)} />
+                      <label htmlFor="name" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Nome Completo</label>
+                      <input id="name" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.name} onChange={(e) => handleChange("name", e.target.value)} />
                     </div>
                     <div className="space-y-2">
-                      <label className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">E-mail</label>
-                      <input className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.email} onChange={(e) => handleChange("email", e.target.value)} />
+                      <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">E-mail</label>
+                      <input id="email" type="email" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.email} onChange={(e) => handleChange("email", e.target.value)} />
                     </div>
                     <div className="space-y-2">
-                      <label className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Telefone</label>
-                      <input className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.phone} onChange={(e) => handleChange("phone", e.target.value)} />
+                      <label htmlFor="phone" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Telefone</label>
+                      <input id="phone" type="tel" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.phone} onChange={(e) => handleChange("phone", e.target.value)} />
                     </div>
                   </div>
-                </div>
+                </fieldset>
 
-                <div className="pt-8 border-t border-slate-100">
-                  <h3 className="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4">Endereço</h3>
+                <fieldset className="pt-8 border-t border-slate-100">
+                  <legend className="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4">Endereço</legend>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 mb-6">
                     <div className="space-y-2">
-                      <label className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Estado</label>
-                      <input className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.state} onChange={(e) => handleChange("state", e.target.value)} />
+                      <label htmlFor="state" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Estado</label>
+                      <input id="state" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.state} onChange={(e) => handleChange("state", e.target.value)} />
                     </div>
                     <div className="space-y-2">
-                      <label className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Cidade</label>
-                      <input className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.city} onChange={(e) => handleChange("city", e.target.value)} />
+                      <label htmlFor="city" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Cidade</label>
+                      <input id="city" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.city} onChange={(e) => handleChange("city", e.target.value)} />
                     </div>
                     <div className="space-y-2">
-                      <label className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Bairro</label>
-                      <input className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.neighborhood} onChange={(e) => handleChange("neighborhood", e.target.value)} />
+                      <label htmlFor="neighborhood" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Bairro</label>
+                      <input id="neighborhood" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.neighborhood} onChange={(e) => handleChange("neighborhood", e.target.value)} />
                     </div>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                     <div className="space-y-2">
-                      <label className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Rua</label>
-                      <input className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.street} onChange={(e) => handleChange("street", e.target.value)} />
+                      <label htmlFor="street" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Rua</label>
+                      <input id="street" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.street} onChange={(e) => handleChange("street", e.target.value)} />
                     </div>
                     <div className="space-y-2">
-                      <label className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Número</label>
-                      <input className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.number} onChange={(e) => handleChange("number", e.target.value)} />
+                      <label htmlFor="number" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Número</label>
+                      <input id="number" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.number} onChange={(e) => handleChange("number", e.target.value)} />
                     </div>
                   </div>
-                </div>
+                </fieldset>
 
-                <div className="pt-8 border-t border-slate-100">
-                  <h3 className="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4">Dados Profissionais</h3>
+                <fieldset className="pt-8 border-t border-slate-100">
+                  <legend className="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4">Dados Profissionais</legend>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 mb-6">
                     <div className="space-y-2">
-                      <label className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Título / Profissão</label>
-                      <input className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.role} onChange={(e) => handleChange("role", e.target.value)} />
+                      <label htmlFor="role" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Título / Profissão</label>
+                      <input id="role" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.role} onChange={(e) => handleChange("role", e.target.value)} />
                     </div>
                     <div className="space-y-2">
-                      <label className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Registro Profissional</label>
-                      <input className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.registration} onChange={(e) => handleChange("registration", e.target.value)} />
+                      <label htmlFor="registration" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Registro Profissional</label>
+                      <input id="registration" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.registration} onChange={(e) => handleChange("registration", e.target.value)} />
                     </div>
                   </div>
                   <div className="space-y-2 mb-6">
-                    <label className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Sobre Você</label>
-                    <textarea className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50 min-h-24" value={form.about} onChange={(e) => handleChange("about", e.target.value)} />
+                    <label htmlFor="about" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Sobre Você</label>
+                    <textarea id="about" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50 min-h-24" value={form.about} onChange={(e) => handleChange("about", e.target.value)} />
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                     <div className="space-y-2">
-                      <label className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Instagram</label>
-                      <input className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.instagram} onChange={(e) => handleChange("instagram", e.target.value)} />
+                      <label htmlFor="instagram" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Instagram</label>
+                      <input id="instagram" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.instagram} onChange={(e) => handleChange("instagram", e.target.value)} />
                     </div>
                     <div className="space-y-2">
-                      <label className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Site</label>
-                      <input className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.site} onChange={(e) => handleChange("site", e.target.value)} />
+                      <label htmlFor="site" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Site</label>
+                      <input id="site" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.site} onChange={(e) => handleChange("site", e.target.value)} />
                     </div>
                   </div>
-                </div>
+                </fieldset>
 
                 {saveMessage && (
-                  <p className="text-sm text-center text-on-surface-variant">{saveMessage}</p>
+                  <p role="status" className="text-sm text-center text-on-surface-variant">{saveMessage}</p>
                 )}
 
                 <div className="pt-8 border-t border-slate-100 flex justify-end gap-4">
