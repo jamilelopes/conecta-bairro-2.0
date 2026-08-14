@@ -5,17 +5,21 @@ import Footer from "../components/Footer";
 function Profile() {
   const { slug } = useParams();
 
-  // TODO: substituir por fetch em GET /professionals/slug/:slug
   const professional = {
-    name: "Ricardo Oliveira",
-    role: "Especialista em Reformas & Design de Interiores",
-    address: "Rua Oscar Freire, Jardins, São Paulo, SP",
-    about: "Profissional especializado em transformar espaços residenciais e comerciais com foco em funcionalidade e estética contemporânea.",
-    reviews: [
-      { rating: 5, text: "Trabalho impecável e muito organizado." },
-      { rating: 5, text: "Superou as expectativas, recomendo fortemente." },
-    ],
+    name: "Marcos Silva",
+    role: "Arquiteto e Reformas",
+    registration: "CAU-A123456-7",
+    address: "Rua Cardeal Arcoverde, 1234, Pinheiros, São Paulo, SP",
+    about: "Profissional especializado em reformas residenciais e comerciais com foco em funcionalidade e estética contemporânea. Mais de 10 anos de experiência no mercado paulistano.",
+    instagram: "marcos_arq",
+    site: "marcossilva.arq.br",
+    phone: "5511991234567",
   };
+
+  const whatsappMessage = encodeURIComponent(
+    "Ola " + professional.name + ", vi seu perfil no Conecta Bairro e gostaria de solicitar um orcamento."
+  );
+  const whatsappLink = "https://api.whatsapp.com/send?phone=" + professional.phone + "&text=" + whatsappMessage;
 
   return (
     <div className="bg-surface text-on-surface min-h-screen flex flex-col">
@@ -23,7 +27,7 @@ function Profile() {
       <div className="flex-grow pt-28 pb-24">
         <div className="max-w-screen-2xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8">
           <main className="space-y-8">
-            <section className="bg-primary-fixed rounded-2xl overflow-hidden shadow-sm border border-surface-container-high py-12 px-8 bg-primary-container/10">
+            <section className="rounded-2xl overflow-hidden shadow-sm border border-surface-container-high py-12 px-8 bg-primary-container/10">
               <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
                 <div className="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-white shadow-xl bg-surface-container-low flex items-center justify-center text-on-surface-variant text-sm shrink-0">
                   Foto
@@ -35,28 +39,16 @@ function Profile() {
                       Profissional Verificado
                     </span>
                   </div>
-                  <p className="text-xl font-semibold text-on-surface-variant mb-4">{professional.role}</p>
+                  <p className="text-xl font-semibold text-on-surface-variant mb-2">{professional.role}</p>
+                  <p className="text-sm text-on-surface-variant/80 mb-1">Registro: {professional.registration}</p>
                   <p className="text-sm text-on-surface-variant/90 font-medium">{professional.address}</p>
                 </div>
               </div>
             </section>
 
-            <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-primary-container p-8 rounded-2xl text-white shadow-lg">
-                <h3 className="font-bold mb-2">Sobre o Profissional</h3>
-                <p className="text-sm opacity-90 leading-relaxed">{professional.about}</p>
-              </div>
-              <div className="bg-surface-container-lowest p-8 rounded-2xl shadow-sm border border-surface-container">
-                <h3 className="font-headline font-bold mb-4">Avaliações Recentes</h3>
-                <div className="space-y-4">
-                  {professional.reviews.map((review, i) => (
-                    <div key={i} className="border-b pb-3">
-                      <div className="text-secondary-container mb-1">{"★".repeat(review.rating)}</div>
-                      <p className="text-sm text-on-surface-variant italic">"{review.text}"</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
+            <section className="bg-primary-container p-8 rounded-2xl text-white shadow-lg">
+              <h3 className="font-bold mb-2">Sobre o Profissional</h3>
+              <p className="text-sm opacity-90 leading-relaxed">{professional.about}</p>
             </section>
           </main>
 
@@ -64,18 +56,23 @@ function Profile() {
             <div className="sticky top-24 space-y-6">
               <div className="bg-surface-container-lowest p-8 rounded-2xl shadow-xl border border-surface-container">
                 <h4 className="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4">
-                  Informações de Contato
+                  Informacoes de Contato
                 </h4>
-                <div className="space-y-4 mb-6">
-                  <div className="text-sm font-medium">📞 (11) 9****-****</div>
-                  <div className="text-sm font-medium">@ricardo_design</div>
+                <div className="space-y-3 mb-6 text-sm font-medium">
+                  <p>@{professional.instagram}</p>
+                  <p>{professional.site}</p>
                 </div>
-                <button className="w-full bg-secondary-container text-on-secondary-container py-4 rounded-xl font-headline font-extrabold text-lg">
-                  Solicitar Orçamento
-                </button>
+                <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="w-full bg-secondary-container text-on-secondary-container py-4 rounded-xl font-headline font-extrabold text-lg flex items-center justify-center gap-2">
+                  Solicitar Orcamento
+                </a>
                 <p className="text-[11px] text-center text-on-surface-variant mt-4">
-                  Informações liberadas após a contratação.
+                  Contato via WhatsApp direto com o profissional.
                 </p>
+              </div>
+
+              <div className="flex justify-between text-xs text-on-surface-variant px-2">
+                <button className="hover:underline">Compartilhar</button>
+                <button className="hover:underline">Denunciar</button>
               </div>
             </div>
           </aside>

@@ -24,7 +24,14 @@ function Home() {
                 <div className="flex-1 flex items-center px-4 gap-3 bg-surface-container-low rounded-xl py-3">
                   <input
                     className="bg-transparent border-none focus:ring-0 w-full outline-none"
-                    placeholder="Qual serviço você procura?"
+                    placeholder="Qual categoria?"
+                    type="text"
+                  />
+                </div>
+                <div className="flex-1 flex items-center px-4 gap-3 bg-surface-container-low rounded-xl py-3">
+                  <input
+                    className="bg-transparent border-none focus:ring-0 w-full outline-none"
+                    placeholder="Sua localização"
                     type="text"
                   />
                 </div>
@@ -34,6 +41,19 @@ function Home() {
                 >
                   Buscar
                 </button>
+              </div>
+            </div>
+
+            <div className="w-full md:w-1/2 relative">
+              <div className="relative w-full aspect-square rounded-[2rem] bg-surface-container-high flex items-center justify-center text-on-surface-variant shadow-2xl">
+                Foto
+              </div>
+              <div className="absolute -bottom-4 left-4 bg-surface-container-lowest rounded-2xl shadow-lg p-4 flex items-center gap-3">
+                <span className="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-lg">✓</span>
+                <div>
+                  <p className="font-bold text-sm">Profissionais confiáveis</p>
+                  <p className="text-xs text-on-surface-variant">Próximos de você</p>
+                </div>
               </div>
             </div>
           </div>
