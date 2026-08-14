@@ -33,3 +33,8 @@ export async function updateMyProfile(data) {
   if (!response.ok) throw new Error("Erro ao salvar perfil");
   return response.json();
 }
+export async function getMyProfile() {
+  const response = await fetch(`${API_BASE_URL}/professionals/me`);
+  if (!response.ok) throw new Error("Erro ao buscar perfil");
+  return response.json();
+}
