@@ -25,7 +25,7 @@ function Explore() {
   const [loading, setLoading] = useState(true);
   const [usingMock, setUsingMock] = useState(false);
 
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const initialCategory = searchParams.get("category");
   const initialCity = searchParams.get("city");
 
@@ -45,7 +45,7 @@ function Explore() {
     if (selectedCategories.length > 0) filters.category = selectedCategories.join(",");
     if (selectedState) filters.state = selectedState;
     if (cityInput.trim()) filters.city = cityInput.trim();
-
+      setSearchParams(filters);
     getProfessionals(filters)
       .then((data) => {
         setProfessionals(data);
