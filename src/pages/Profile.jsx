@@ -110,8 +110,18 @@ function Profile() {
                   Informações de Contato
                 </h4>
                 <div className="space-y-3 mb-6 text-sm font-medium">
-                  {professional.instagram && <p>@{professional.instagram}</p>}
-                  {professional.website && <p>{professional.website}</p>}
+                  {professional.instagram && (
+                    <p className="flex items-center gap-2">
+                      <span className="material-symbols-outlined text-base" aria-hidden="true">photo_camera</span>
+                      {professional.instagram}
+                    </p>
+                  )}
+                  {professional.website && (
+                    <p className="flex items-center gap-2">
+                      <span className="material-symbols-outlined text-base" aria-hidden="true">language</span>
+                      {professional.website}
+                    </p>
+                  )}
                 </div>
                 <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="w-full bg-secondary-container text-on-secondary-container py-4 rounded-xl font-headline font-extrabold text-lg flex items-center justify-center gap-2">
                   Solicitar Orçamento
@@ -122,8 +132,14 @@ function Profile() {
               </div>
 
               <div className="flex justify-between text-xs text-on-surface-variant px-2">
-                <button className="hover:underline">Compartilhar</button>
-                <button className="hover:underline">Denunciar</button>
+                <button className="hover:underline flex items-center gap-1">
+                  <span className="material-symbols-outlined text-sm" aria-hidden="true">share</span>
+                  Compartilhar
+                </button>
+                <button className="hover:underline flex items-center gap-1">
+                  <span className="material-symbols-outlined text-sm" aria-hidden="true">flag</span>
+                  Denunciar
+                </button>
               </div>
             </div>
           </aside>
