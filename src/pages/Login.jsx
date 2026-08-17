@@ -1,12 +1,46 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect, useRef } from "react";
 import Navbar from "../components/Navbar";
+import { googleLogin } from "../services/professionalsService";
+import { saveAuthTokens } from "../services/auth";
 
 function Login() {
   const navigate = useNavigate();
+  const hiddenButtonRef = useRef(null);
+
+  async function handleCredentialResponse(response) {
+    try {
+      const result = await googleLogin(response.credential, "professional");
+      saveAuthTokens(result.access_token, result.refresh_token);
+      navigate("/explore");
+    } catch (err) {
+      console.error(err);
+      alert("Não foi possível entrar com Google. Tente novamente.");
+    }
+  }
+
+  useEffect(() => {
+    const checkGoogleLoaded = setInterval(() => {
+      if (window.google && window.google.accounts) {
+        clearInterval(checkGoogleLoaded);
+        window.google.accounts.id.initialize({
+          client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+          callback: handleCredentialResponse,
+        });
+        window.google.accounts.id.renderButton(hiddenButtonRef.current, {
+          type: "standard",
+          theme: "outline",
+          size: "large",
+        });
+      }
+    }, 200);
+
+    return () => clearInterval(checkGoogleLoaded);
+  }, []);
 
   const handleGoogleLogin = () => {
-    // TODO: conectar com POST /auth/google
-    navigate("/explore");
+    const realButton = hiddenButtonRef.current?.querySelector("div[role=button]");
+    if (realButton) realButton.click();
   };
 
   return (
@@ -50,6 +84,7 @@ function Login() {
               <p className="text-on-surface-variant">Ofereça serviços e encontre profissionais em um só lugar.</p>
             </div>
 
+            <div ref={hiddenButtonRef} style={{ display: "none" }}></div>
             <button
               onClick={handleGoogleLogin}
               className="flex items-center justify-center px-4 py-3 border border-outline-variant/30 rounded-xl hover:bg-surface-container-low transition-colors w-full"
