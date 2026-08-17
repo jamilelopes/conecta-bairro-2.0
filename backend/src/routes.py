@@ -482,7 +482,9 @@ def search_professionals():
         )
 
     if category:
-        query = query.filter(Professional.categories.any(Category.slug == category))
+        category_slugs = [c.strip() for c in category.split(',') if c.strip()]
+        if category_slugs:
+            query = query.filter(Professional.categories.any(Category.slug.in_(category_slugs)))
 
     if state:
         query = query.filter(Professional.state.ilike(state))
