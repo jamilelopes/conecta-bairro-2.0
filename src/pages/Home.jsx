@@ -59,11 +59,11 @@ function Home() {
                 </div>
                 <div className="flex-1 flex items-center px-4 gap-3 bg-surface-container-low rounded-xl py-3">
                   <span className="material-symbols-outlined text-outline" aria-hidden="true">location_on</span>
-                  <label htmlFor="home-location" className="sr-only">Sua localização</label>
+                  <label htmlFor="home-location" className="sr-only">Qual cidade?</label>
                   <input
                     id="home-location"
                     className="bg-transparent border-none focus:ring-0 w-full outline-none"
-                    placeholder="Sua localização"
+                    placeholder="Qual cidade?"
                     type="text"
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
