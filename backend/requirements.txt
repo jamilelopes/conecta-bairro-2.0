@@ -7,6 +7,7 @@ pymysql
 python-dotenv
 PyJWT
 google-auth
+requests
 
 #             node.js
 

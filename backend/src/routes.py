@@ -164,6 +164,7 @@ def paginate_query(query, page, limit):
 @api.route('/auth/google', methods=['POST'])
 def google_auth():
     data = request.get_json()
+
     if not data or 'googleToken' not in data:
         return jsonify({'code': 'INVALID_REQUEST', 'message': 'googleToken is required'}), 401
 
