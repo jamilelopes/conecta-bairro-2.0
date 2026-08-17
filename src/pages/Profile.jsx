@@ -69,9 +69,9 @@ function Profile() {
           <main className="space-y-8">
             <section className="rounded-2xl overflow-hidden shadow-sm border border-surface-container-high py-12 px-8 bg-primary-container/10">
               <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
-                {professional.avatar_url ? (
+                {(professional.avatarUrl || professional.avatar_url) ? (
                   <img
-                    src={professional.avatar_url}
+                    src={professional.avatarUrl || professional.avatar_url}
                     alt={"Foto de " + professional.name}
                     className="w-32 h-32 md:w-44 md:h-44 rounded-full border-4 border-white shadow-xl object-cover shrink-0"
                   />
