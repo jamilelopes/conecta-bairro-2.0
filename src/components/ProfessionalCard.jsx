@@ -7,9 +7,9 @@ function ProfessionalCard({ professional }) {
 
   return (
     <div className="group bg-surface-container-lowest rounded-2xl p-5 border border-transparent hover:border-slate-100 transition-all duration-300 hover:shadow-xl flex flex-col">
-      {professional.avatar_url ? (
+      {(professional.avatarUrl || professional.avatar_url) ? (
         <img
-          src={professional.avatar_url}
+          src={professional.avatarUrl || professional.avatar_url}
           alt={"Foto de " + professional.name}
           className="h-56 mb-5 overflow-hidden rounded-xl object-cover w-full"
         />
