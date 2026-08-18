@@ -2,11 +2,17 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useRef } from "react";
 import Navbar from "../components/Navbar";
 import { googleLogin } from "../services/professionalsService";
-import { saveAuthTokens } from "../services/auth";
+import { saveAuthTokens, getAccessToken } from "../services/auth";
 
 function Login() {
   const navigate = useNavigate();
   const hiddenButtonRef = useRef(null);
+
+  useEffect(() => {
+    if (getAccessToken()) {
+      navigate("/settings");
+    }
+  }, [navigate]);
 
   async function handleCredentialResponse(response) {
     try {
