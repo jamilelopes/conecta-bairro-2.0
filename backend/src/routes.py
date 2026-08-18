@@ -120,6 +120,10 @@ def serialize_professional(professional, include_full=False):
             'instagram': professional.instagram,
             'website': professional.website,
             'registrationNumber': professional.registration_number,
+            'registration_number': professional.registration_number,
+            'avatar_url': professional.avatar_url,
+            'street': professional.street,
+            'number': professional.number,
             'address': {
                 'state': professional.state,
                 'city': professional.city,
@@ -436,6 +440,8 @@ def update_my_professional_profile(current_user):
     if not data:
         return jsonify({'code': 'INVALID_REQUEST', 'message': 'Request body is required'}), 400
 
+    if 'name' in data:
+        professional.name = data['name']
     if 'title' in data:
         professional.title = data['title']
     if 'description' in data:
@@ -446,8 +452,20 @@ def update_my_professional_profile(current_user):
         professional.instagram = data['instagram']
     if 'website' in data:
         professional.website = data['website']
+    if 'state' in data:
+        professional.state = data['state']
+    if 'city' in data:
+        professional.city = data['city']
+    if 'district' in data:
+        professional.district = data['district']
+    if 'street' in data:
+        professional.street = data['street']
+    if 'number' in data:
+        professional.number = data['number']
     if 'registrationNumber' in data:
         professional.registration_number = data['registrationNumber']
+    if 'registration_number' in data:
+        professional.registration_number = data['registration_number']
 
     if 'categories' in data:
         category_slugs = data['categories']

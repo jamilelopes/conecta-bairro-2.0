@@ -138,7 +138,8 @@ className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-secondary-contain
                     </div>
                     <div className="space-y-2">
                       <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">E-mail</label>
-                      <input id="email" type="email" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.email} onChange={(e) => handleChange("email", e.target.value)} />
+                      <input id="email" type="email" disabled className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-100 text-slate-500 cursor-not-allowed" value={form.email} />
+                      <p className="text-xs text-on-surface-variant">Vinculado à sua conta Google, não pode ser alterado.</p>
                     </div>
                     <div className="space-y-2">
                       <label htmlFor="phone" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Telefone</label>

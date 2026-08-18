@@ -61,6 +61,8 @@ class Professional(db.Model):
     state = db.Column(db.String(2))
     city = db.Column(db.String(100))
     district = db.Column(db.String(100))
+    street = db.Column(db.String(200))
+    number = db.Column(db.String(20))
     rating = db.Column(db.Float, default=0.0)
     reviews_count = db.Column(db.Integer, default=0)
     verified = db.Column(db.Boolean, default=False)

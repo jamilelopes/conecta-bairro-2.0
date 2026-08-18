@@ -1,6 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { getAccessToken } from "../services/auth";
 
-function Navbar({ variant = "full", isLoggedIn = false }) {
+function Navbar({ variant = "full" }) {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setIsLoggedIn(!!getAccessToken());
+  }, []);
   const navigate = useNavigate();
 
   return (

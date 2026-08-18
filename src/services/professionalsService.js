@@ -54,6 +54,9 @@ export async function googleLogin(googleToken, userType = "client") {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ googleToken, userType }),
   });
+
+  console.log({ response })
   if (!response.ok) throw new Error("Erro ao fazer login com Google");
+
   return response.json();
 }
