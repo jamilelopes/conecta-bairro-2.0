@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getMyProfile, updateMyProfile } from "../services/professionalsService";
+import { clearAuthTokens } from "../services/auth";
 
 const mockProfile = {
   name: "Marcos Silva",
@@ -20,6 +21,7 @@ const mockProfile = {
 };
 
 function Settings() {
+  const navigate = useNavigate();
   const [form, setForm] = useState(mockProfile);
   const [usingMock, setUsingMock] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -46,6 +48,11 @@ function Settings() {
     const previewUrl = URL.createObjectURL(file);
     handleChange("avatar_url", previewUrl);
     // TODO: no futuro, enviar o arquivo de verdade para o back-end (upload real)
+  }
+
+  function handleLogout() {
+    clearAuthTokens();
+    navigate("/");
   }
 
   function handleSubmit(e) {
@@ -215,8 +222,8 @@ className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-secondary-contain
                 )}
 
                 <div className="pt-8 border-t border-slate-100 flex justify-end gap-4">
-                  <button type="button" className="px-8 py-3 rounded-full font-semibold text-slate-500 hover:bg-slate-100">
-                    Descartar Alterações
+                  <button type="button" onClick={handleLogout} className="px-8 py-3 rounded-full font-semibold text-slate-500 hover:bg-slate-100">
+                    Sair da Conta
                   </button>
                   <button type="submit" disabled={saving} className="px-10 py-3 rounded-full font-bold bg-secondary-container text-on-secondary-container shadow-lg hover:scale-105 transition-all disabled:opacity-50">
                     {saving ? "Salvando..." : "Salvar Perfil Profissional"}
