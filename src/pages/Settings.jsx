@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
 import { getMyProfile, updateMyProfile } from "../services/professionalsService";
 import { clearAuthTokens } from "../services/auth";
 
@@ -67,11 +68,7 @@ function Settings() {
 
   return (
     <div className="bg-surface text-on-surface min-h-screen">
-      <header className="fixed top-0 w-full z-50 glass-nav shadow-sm h-20 flex items-center px-8">
-        <Link to="/" className="text-2xl font-bold tracking-tight text-primary font-headline">
-          CONECTA BAIRRO
-        </Link>
-      </header>
+      <Navbar />
       <main className="pt-28 pb-20 px-4 md:px-8 max-w-[1440px] mx-auto">
         <div className="flex flex-col md:flex-row gap-8">
           <nav aria-label="Menu de configurações" className="w-full md:w-80 shrink-0">
