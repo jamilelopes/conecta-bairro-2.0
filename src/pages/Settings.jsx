@@ -74,22 +74,20 @@ function Settings() {
           <nav aria-label="Menu de configurações" className="w-full md:w-80 shrink-0">
             <div className="sticky top-28 space-y-2">
               <h1 className="font-headline text-2xl font-bold mb-6 tracking-tight px-4">Configurações</h1>
-              <a className="flex items-center gap-3 px-4 py-3.5 rounded-2xl bg-primary-container text-white shadow-lg" href="#" aria-current="page">
+              <div className="flex items-center gap-3 px-4 py-3.5 rounded-2xl bg-primary-container text-white shadow-lg">
                 <span className="material-symbols-outlined" aria-hidden="true">person</span>
                 <span className="font-semibold">Dados Pessoais</span>
-              </a>
-
-              <div className="mt-8 flex items-center gap-3 px-4">
-                <img
-                  src={form.avatar_url || "https://ui-avatars.com/api/?name=" + encodeURIComponent(form.name)}
-                  alt={"Foto de " + form.name}
-                  className="w-12 h-12 rounded-full object-cover"
-                />
-                <div>
-                  <p className="font-semibold text-sm">{form.name}</p>
-                  <p className="text-xs text-on-surface-variant">{form.title}</p>
-                </div>
               </div>
+
+              {form.slug && (
+                <Link
+                  to={`/profile/${form.slug}`}
+                  className="flex items-center gap-3 px-4 py-3.5 rounded-2xl text-on-surface-variant hover:bg-surface-container-low transition-colors"
+                >
+                  <span className="material-symbols-outlined" aria-hidden="true">visibility</span>
+                  <span className="font-semibold">Ver Perfil Público</span>
+                </Link>
+              )}
             </div>
           </nav>
 
@@ -118,7 +116,7 @@ className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-secondary-contain
                   />
                 </div>
                 <div>
-                  <h2 id="settings-heading" className="font-headline text-3xl font-bold tracking-tight">Dados Profissionais</h2>
+                  <h2 id="settings-heading" className="font-headline text-3xl font-bold tracking-tight">Meu Perfil</h2>
                   <p className="text-sm text-on-surface-variant">
                     Mantenha suas informações atualizadas para garantir a conformidade do seu cadastro.
                   </p>

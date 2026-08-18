@@ -51,8 +51,7 @@ function Navbar() {
           {isLoggedIn ? (
             <button
               onClick={() => navigate("/settings")}
-              className="w-10 h-10 rounded-full bg-primary-container text-white flex items-center justify-center font-bold overflow-hidden shrink-0"
-              aria-label="Abrir configurações da conta"
+              className="w-10 h-10 rounded-full bg-primary-container text-white flex items-center justify-center font-bold overflow-hidden shrink-0 cursor-pointer"              aria-label="Abrir configurações da conta"
             >
               {currentUser?.avatarUrl ? (
                 <img src={currentUser.avatarUrl} alt="" referrerPolicy="no-referrer" className="w-full h-full object-cover" />
