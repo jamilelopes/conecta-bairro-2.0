@@ -1,5 +1,40 @@
 import { API_BASE_URL } from "./api";
-import { getAccessToken } from "./auth";
+import { getAccessToken, getRefreshToken, saveAuthTokens, clearAuthTokens } from "./auth";
+
+async function authFetch(url, options = {}) {
+  const doFetch = (token) =>
+    fetch(url, {
+      ...options,
+      headers: {
+        ...(options.headers || {}),
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+  let response = await doFetch(getAccessToken());
+
+  if (response.status === 401) {
+    const body = await response.clone().json().catch(() => null);
+
+    if (body?.code === "TOKEN_EXPIRED") {
+      const refreshResponse = await fetch(`${API_BASE_URL}/auth/refresh`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refresh_token: getRefreshToken() }),
+      });
+
+      if (refreshResponse.ok) {
+        const tokens = await refreshResponse.json();
+        saveAuthTokens(tokens.access_token, tokens.refresh_token);
+        response = await doFetch(tokens.access_token);
+      } else {
+        clearAuthTokens();
+      }
+    }
+  }
+
+  return response;
+}
 
 export async function getFeaturedProfessionals() {
   const response = await fetch(`${API_BASE_URL}/professionals/featured`);
@@ -29,25 +64,21 @@ export async function getCategories() {
 }
 
 export async function getMyProfile() {
-  const response = await fetch(`${API_BASE_URL}/professionals/me`, {
-    headers: { Authorization: `Bearer ${getAccessToken()}` },
-  });
+  const response = await authFetch(`${API_BASE_URL}/professionals/me`);
   if (!response.ok) throw new Error("Erro ao buscar perfil");
   return response.json();
 }
 
 export async function updateMyProfile(data) {
-  const response = await fetch(`${API_BASE_URL}/professionals/me`, {
+  const response = await authFetch(`${API_BASE_URL}/professionals/me`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${getAccessToken()}`,
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!response.ok) throw new Error("Erro ao salvar perfil");
   return response.json();
 }
+
 export async function googleLogin(googleToken, userType = "client") {
   const response = await fetch(`${API_BASE_URL}/auth/google`, {
     method: "POST",
@@ -55,7 +86,6 @@ export async function googleLogin(googleToken, userType = "client") {
     body: JSON.stringify({ googleToken, userType }),
   });
 
-  console.log({ response })
   if (!response.ok) throw new Error("Erro ao fazer login com Google");
 
   return response.json();
