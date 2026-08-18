@@ -116,7 +116,7 @@ def serialize_professional(professional, include_full=False):
         data.update({
             'description': professional.description,
             'phone': professional.phone,
-            'email': professional.email,
+            'email': professional.user.email if professional.user else professional.email,
             'instagram': professional.instagram,
             'website': professional.website,
             'registrationNumber': professional.registration_number,

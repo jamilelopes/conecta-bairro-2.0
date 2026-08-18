@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { getMyProfile, updateMyProfile } from "../services/professionalsService";
+import { getMyProfile, updateMyProfile, getCategories } from "../services/professionalsService";
 import { clearAuthTokens } from "../services/auth";
 import { useUnsavedChanges } from "../contexts/UnsavedChangesContext";
 
 const mockProfile = {
   name: "Marcos Silva",
+  categories: [],
   email: "marcos@conectabairro.com.br",
   phone: "(11) 99123-4567",
   state: "SP",
@@ -22,20 +23,27 @@ const mockProfile = {
   avatar_url: "https://randomuser.me/api/portraits/med/men/32.jpg",
 };
 
+function normalizeProfile(data) {
+  return { ...data, categories: (data.categories || []).map((c) => (typeof c === "string" ? c : c.slug)) };
+}
 function Settings() {
   const navigate = useNavigate();
   const [form, setForm] = useState(mockProfile);
   const [originalForm, setOriginalForm] = useState(mockProfile);
   const [usingMock, setUsingMock] = useState(false);
+  const [availableCategories, setAvailableCategories] = useState([]);
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
   const fileInputRef = useRef(null);
 
   useEffect(() => {
+    getCategories().then(setAvailableCategories).catch(() => {});
+
     getMyProfile()
       .then((data) => {
-        setForm(data);
-        setOriginalForm(data);
+        const normalized = normalizeProfile(data);
+        setForm(normalized);
+        setOriginalForm(normalized);
       })
       .catch(() => setUsingMock(true));
   }, []);
@@ -50,6 +58,15 @@ function Settings() {
 
   function handleChange(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
+  }
+
+  function toggleCategory(slug) {
+    setForm((prev) => ({
+      ...prev,
+      categories: prev.categories?.includes(slug)
+        ? prev.categories.filter((s) => s !== slug)
+        : [...(prev.categories || []), slug],
+    }));
   }
 
   function handlePhotoClick() {
@@ -83,7 +100,7 @@ function Settings() {
     updateMyProfile(form)
       .then((data) => {
         setSaveMessage("Perfil salvo com sucesso!");
-        setOriginalForm(data);
+        setOriginalForm(normalizeProfile(data));
       })
       .catch(() => setSaveMessage("Não foi possível salvar agora (back-end indisponível)."))
       .finally(() => setSaving(false));
@@ -106,7 +123,7 @@ function Settings() {
                 <button
                   type="button"
                   onClick={() => guardNavigate(`/profile/${form.slug}`)}
-                  className="flex items-center gap-3 px-4 py-3.5 rounded-2xl text-on-surface-variant hover:bg-surface-container-low transition-colors w-full text-left"
+                  className="flex items-center gap-3 px-4 py-3.5 rounded-2xl text-on-surface-variant hover:bg-surface-container-low transition-colors w-full text-left cursor-pointer"
                 >
                   <span className="material-symbols-outlined" aria-hidden="true">visibility</span>
                   <span className="font-semibold">Ver Perfil Público</span>
@@ -218,6 +235,32 @@ className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-secondary-contain
                     <div className="space-y-2">
                       <label htmlFor="registration_number" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Registro Profissional</label>
                       <input id="registration_number" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.registration_number} onChange={(e) => handleChange("registration_number", e.target.value)} />
+                    </div>
+                  </div>
+                  <div className="space-y-2 mb-6">
+                    <span className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Categorias de Atuação</span>
+                    <div className="flex flex-wrap gap-3 mt-2">
+                      {availableCategories.map((c) => {
+                        const checked = form.categories?.includes(c.slug);
+                        return (
+                          <label
+                            key={c.id}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium cursor-pointer transition-colors ${
+                              checked
+                                ? "bg-primary-container text-white border-primary-container"
+                                : "bg-slate-50 text-on-surface-variant border-slate-200 hover:bg-slate-100"
+                            }`}
+                          >
+                            <input
+                              type="checkbox"
+                              className="hidden"
+                              checked={checked || false}
+                              onChange={() => toggleCategory(c.slug)}
+                            />
+                            {c.name}
+                          </label>
+                        );
+                      })}
                     </div>
                   </div>
                   <div className="space-y-2 mb-6">
