@@ -71,7 +71,7 @@ function Home() {
                 </div>
                 <button
                   onClick={handleSearch}
-                  className="bg-secondary-container text-on-secondary-container px-8 py-4 rounded-xl font-bold text-lg hover:scale-[0.98] transition-transform"
+                  className="bg-secondary-container text-on-secondary-container px-8 py-4 rounded-xl font-bold text-lg hover:scale-[0.98] transition-transform cursor-pointer"
                 >
                   Buscar
                 </button>

@@ -499,9 +499,12 @@ def search_professionals():
 
     if q:
         search_term = f'%{q}%'
+        name_start = f'{q}%'
+        name_word_start = f'% {q}%'
         query = query.filter(
             db.or_(
-                Professional.name.ilike(search_term),
+                Professional.name.ilike(name_start),
+                Professional.name.ilike(name_word_start),
                 Professional.title.ilike(search_term),
                 Professional.description.ilike(search_term)
             )

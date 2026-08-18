@@ -60,7 +60,16 @@ function Settings() {
       .catch(() => setUsingMock(true));
   }, []);
 
-  const isDirty = JSON.stringify(form) !== JSON.stringify(originalForm);
+  const EDITABLE_FIELDS = ["name", "phone", "state", "city", "district", "street", "number", "title", "registration_number", "description", "instagram", "website", "avatar_url"];
+
+  function pickEditable(obj) {
+    const picked = {};
+    EDITABLE_FIELDS.forEach((f) => { picked[f] = obj[f] ?? ""; });
+    picked.categories = [...(obj.categories || [])].sort();
+    return picked;
+  }
+
+  const isDirty = JSON.stringify(pickEditable(form)) !== JSON.stringify(pickEditable(originalForm));
   const { setIsDirty, guardNavigate } = useUnsavedChanges();
 
   useEffect(() => {

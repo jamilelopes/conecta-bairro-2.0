@@ -42,7 +42,7 @@ function ProfessionalCard({ professional }) {
       <div className="pt-4 mt-4 border-t border-slate-50 flex items-center justify-end">
         <button
           onClick={() => navigate("/profile/" + professional.slug)}
-          className="bg-primary text-white text-sm font-bold py-2.5 px-5 rounded-xl hover:bg-primary-container shadow-md"
+          className="bg-primary text-white text-sm font-bold py-2.5 px-5 rounded-xl hover:bg-primary-container shadow-md cursor-pointer"
         >
           Ver Perfil
         </button>
