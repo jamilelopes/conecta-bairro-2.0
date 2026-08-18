@@ -178,10 +178,16 @@ def google_auth():
     try:
         import google.oauth2.id_token
         from google.auth.transport import requests as google_requests
-        idinfo = google.oauth2.id_token.verify_oauth2_token(google_token, google_requests.Request())
+        idinfo = google.oauth2.id_token.verify_oauth2_token(
+            google_token,
+            google_requests.Request(),
+            audience=os.getenv('GOOGLE_CLIENT_ID')
+        )
         email = idinfo.get('email')
         name = idinfo.get('name')
         avatar_url = idinfo.get('picture')
+        if avatar_url and '=s96-c' in avatar_url:
+            avatar_url = avatar_url.replace('=s96-c', '=s400-c')
     except Exception:
         return jsonify({'code': 'INVALID_TOKEN', 'message': 'Invalid Google token'}), 401
 
@@ -211,6 +217,7 @@ def google_auth():
                 user_id=user.id,
                 slug=slug,
                 name=name,
+                avatar_url=avatar_url,
                 state=user.address_state,
                 city=user.address_city,
                 district=user.address_district

@@ -90,3 +90,8 @@ export async function googleLogin(googleToken, userType = "client") {
 
   return response.json();
 }
+export async function getCurrentUser() {
+  const response = await authFetch(`${API_BASE_URL}/users/me`);
+  if (!response.ok) throw new Error("Erro ao buscar usuário atual");
+  return response.json();
+}

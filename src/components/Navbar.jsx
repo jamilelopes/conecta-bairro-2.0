@@ -1,14 +1,22 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getAccessToken } from "../services/auth";
+import { getCurrentUser } from "../services/professionalsService";
 
 function Navbar({ variant = "full" }) {
+  const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    setIsLoggedIn(!!getAccessToken());
+    const loggedIn = !!getAccessToken();
+    setIsLoggedIn(loggedIn);
+    if (loggedIn) {
+      getCurrentUser()
+        .then(setCurrentUser)
+        .catch(() => setCurrentUser(null));
+    }
   }, []);
-  const navigate = useNavigate();
 
   return (
     <header className="fixed top-0 w-full z-50 glass-nav shadow-sm h-20">
@@ -45,10 +53,14 @@ function Navbar({ variant = "full" }) {
           {isLoggedIn ? (
             <button
               onClick={() => navigate("/settings")}
-              className="w-10 h-10 rounded-full bg-primary-container text-white flex items-center justify-center font-bold"
+              className="w-10 h-10 rounded-full bg-primary-container text-white flex items-center justify-center font-bold overflow-hidden"
               aria-label="Abrir configurações da conta"
             >
-              M
+              {currentUser?.avatarUrl ? (
+                <img src={currentUser.avatarUrl} alt="" referrerPolicy="no-referrer" className="w-full h-full object-cover" />
+              ) : (
+                currentUser?.name ? currentUser.name.charAt(0).toUpperCase() : "?"
+              )}
             </button>
           ) : (
             <>

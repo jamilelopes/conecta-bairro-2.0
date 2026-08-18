@@ -11,6 +11,7 @@ function ProfessionalCard({ professional }) {
         <img
           src={professional.avatarUrl || professional.avatar_url}
           alt={"Foto de " + professional.name}
+          referrerPolicy="no-referrer"
           className="h-56 mb-5 overflow-hidden rounded-xl object-cover w-full"
         />
       ) : (
