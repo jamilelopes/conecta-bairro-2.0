@@ -24,6 +24,7 @@ const mockProfile = {
 function Settings() {
   const navigate = useNavigate();
   const [form, setForm] = useState(mockProfile);
+  const [originalForm, setOriginalForm] = useState(mockProfile);
   const [usingMock, setUsingMock] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
@@ -31,9 +32,14 @@ function Settings() {
 
   useEffect(() => {
     getMyProfile()
-      .then((data) => setForm(data))
+      .then((data) => {
+        setForm(data);
+        setOriginalForm(data);
+      })
       .catch(() => setUsingMock(true));
   }, []);
+
+  const isDirty = JSON.stringify(form) !== JSON.stringify(originalForm);
 
   function handleChange(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -52,8 +58,15 @@ function Settings() {
   }
 
   function handleLogout() {
+    if (isDirty && !window.confirm("Você tem alterações não salvas. Sair mesmo assim?")) return;
     clearAuthTokens();
     navigate("/");
+  }
+
+  function handleDiscard() {
+    if (!isDirty) return;
+    if (!window.confirm("Descartar todas as alterações não salvas?")) return;
+    setForm(originalForm);
   }
 
   function handleSubmit(e) {
@@ -61,7 +74,10 @@ function Settings() {
     setSaving(true);
     setSaveMessage("");
     updateMyProfile(form)
-      .then(() => setSaveMessage("Perfil salvo com sucesso!"))
+      .then((data) => {
+        setSaveMessage("Perfil salvo com sucesso!");
+        setOriginalForm(data);
+      })
       .catch(() => setSaveMessage("Não foi possível salvar agora (back-end indisponível)."))
       .finally(() => setSaving(false));
   }
@@ -216,13 +232,18 @@ className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-secondary-contain
                   <p role="status" className="text-sm text-center text-on-surface-variant">{saveMessage}</p>
                 )}
 
-                <div className="pt-8 border-t border-slate-100 flex justify-end gap-4">
+                <div className="pt-8 border-t border-slate-100 flex justify-between items-center gap-4">
                   <button type="button" onClick={handleLogout} className="px-8 py-3 rounded-full font-semibold text-slate-500 hover:bg-slate-100">
                     Sair da Conta
                   </button>
-                  <button type="submit" disabled={saving} className="px-10 py-3 rounded-full font-bold bg-secondary-container text-on-secondary-container shadow-lg hover:scale-105 transition-all disabled:opacity-50">
-                    {saving ? "Salvando..." : "Salvar Perfil Profissional"}
-                  </button>
+                  <div className="flex gap-4">
+                    <button type="button" onClick={handleDiscard} disabled={!isDirty} className={`px-8 py-3 rounded-full font-semibold transition-colors ${isDirty ? "text-primary hover:bg-slate-100" : "text-slate-300 cursor-not-allowed"}`}>
+                      Descartar Alterações
+                    </button>
+                    <button type="submit" disabled={saving || !isDirty} className="px-10 py-3 rounded-full font-bold bg-secondary-container text-on-secondary-container shadow-lg hover:scale-105 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+                      {saving ? "Salvando..." : "Salvar Perfil"}
+                    </button>
+                  </div>
                 </div>
               </form>
             </div>
