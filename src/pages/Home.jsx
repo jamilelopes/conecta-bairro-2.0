@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -14,6 +14,18 @@ function Home() {
   const [categories, setCategories] = useState(mockCategories);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [location, setLocation] = useState("");
+  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
+  const categoryDropdownRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (categoryDropdownRef.current && !categoryDropdownRef.current.contains(e.target)) {
+        setCategoryDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     getCategories()
@@ -32,7 +44,7 @@ function Home() {
     <div className="flex flex-col min-h-screen">
       <Navbar />
       <main className="pt-20">
-        <section className="relative overflow-hidden py-24 md:py-32 bg-gradient-to-br from-surface to-surface-container">
+        <section className="relative py-24 md:py-32 bg-gradient-to-br from-surface to-surface-container">
           <div className="max-w-7xl mx-auto px-8 relative z-10 flex flex-col md:flex-row items-center gap-12">
             <div className="w-full md:w-1/2">
               <h1 className="font-headline text-5xl md:text-7xl font-bold text-on-surface leading-[1.1] mb-6 tracking-tight">
@@ -42,22 +54,37 @@ function Home() {
                 De reformas residenciais a consultoria de TI, encontre especialistas selecionados para transformar seus projetos em realidade.
               </p>
               <div className="bg-surface-container-lowest p-2 rounded-2xl shadow-lg flex flex-col md:flex-row gap-2 max-w-2xl">
-                <div className="flex-1 flex items-center px-4 gap-3 bg-surface-container-low rounded-xl py-3">
-                  <span className="material-symbols-outlined text-outline" aria-hidden="true">search</span>
-                  <label htmlFor="home-category" className="sr-only">Qual categoria você procura</label>
-                  <select
-                    id="home-category"
-                    className="bg-transparent border-none focus:ring-0 w-full outline-none"
-                    value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value)}
+                <div className="flex-1 relative" ref={categoryDropdownRef}>
+                  <button
+                    type="button"
+                    onClick={() => setCategoryDropdownOpen((prev) => !prev)}
+                    className="w-full h-[52px] flex items-center px-4 gap-3 bg-surface-container-low border border-slate-200 rounded-xl cursor-pointer text-left"
                   >
-                    <option value="" disabled className="text-slate-400">Qual categoria?</option>
-                    {categories.map((c) => (
-                      <option key={c.id} value={c.slug}>{c.name}</option>
-                    ))}
-                  </select>
+                    <span className="material-symbols-outlined text-outline" aria-hidden="true">search</span>
+                    <span className={selectedCategory ? "text-on-surface" : "text-slate-400"}>
+                      {selectedCategory ? categories.find((c) => c.slug === selectedCategory)?.name : "Qual categoria?"}
+                    </span>
+                  </button>
+
+                  {categoryDropdownOpen && (
+                    <div className="absolute z-50 mt-2 w-full max-h-64 overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-2xl p-2">
+                      {categories.map((c) => (
+                        <button
+                          key={c.id}
+                          type="button"
+                          onClick={() => {
+                            setSelectedCategory(c.slug);
+                            setCategoryDropdownOpen(false);
+                          }}
+                          className="w-full text-left px-3 py-2.5 rounded-lg hover:bg-slate-50 cursor-pointer text-sm"
+                        >
+                          {c.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                <div className="flex-1 flex items-center px-4 gap-3 bg-surface-container-low rounded-xl py-3">
+                <div className="flex-1 h-[52px] flex items-center px-4 gap-3 bg-surface-container-low border border-slate-200 rounded-xl">
                   <span className="material-symbols-outlined text-outline" aria-hidden="true">location_on</span>
                   <label htmlFor="home-location" className="sr-only">Qual cidade?</label>
                   <input
@@ -71,7 +98,7 @@ function Home() {
                 </div>
                 <button
                   onClick={handleSearch}
-                  className="bg-secondary-container text-on-secondary-container px-8 py-4 rounded-xl font-bold text-lg hover:scale-[0.98] transition-transform cursor-pointer"
+                  className="bg-secondary-container text-on-secondary-container px-8 h-[52px] rounded-xl font-bold text-lg hover:scale-[0.98] transition-transform cursor-pointer"
                 >
                   Buscar
                 </button>

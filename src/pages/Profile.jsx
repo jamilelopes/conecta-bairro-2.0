@@ -123,7 +123,7 @@ function Profile() {
                     </p>
                   )}
                 </div>
-                <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="w-full bg-secondary-container text-on-secondary-container py-4 rounded-xl font-headline font-extrabold text-lg flex items-center justify-center gap-2">
+                <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="w-full bg-secondary-container text-on-secondary-container py-3.5 rounded-xl font-headline font-bold text-base flex items-center justify-center gap-2 cursor-pointer">
                   Solicitar Orçamento
                 </a>
                 <p className="text-[11px] text-center text-on-surface-variant mt-4">
