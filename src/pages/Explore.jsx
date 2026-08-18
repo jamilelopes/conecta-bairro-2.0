@@ -28,10 +28,17 @@ function Explore() {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialCategory = searchParams.get("category");
   const initialCity = searchParams.get("city");
+  const initialQuery = searchParams.get("q");
 
   const [selectedCategories, setSelectedCategories] = useState(initialCategory ? [initialCategory] : []);
   const [selectedState, setSelectedState] = useState("");
   const [cityInput, setCityInput] = useState(initialCity || "");
+  const [searchQuery, setSearchQuery] = useState(initialQuery || "");
+
+  useEffect(() => {
+    const q = searchParams.get("q") || "";
+    setSearchQuery(q);
+  }, [searchParams]);
 
   useEffect(() => {
     getCategories()
@@ -42,6 +49,7 @@ function Explore() {
   useEffect(() => {
     setLoading(true);
     const filters = {};
+    if (searchQuery.trim()) filters.q = searchQuery.trim();
     if (selectedCategories.length > 0) filters.category = selectedCategories.join(",");
     if (selectedState) filters.state = selectedState;
     if (cityInput.trim()) filters.city = cityInput.trim();
@@ -55,7 +63,7 @@ function Explore() {
         setUsingMock(true);
         setLoading(false);
       });
-  }, [selectedCategories, selectedState, cityInput]);
+  }, [searchQuery, selectedCategories, selectedState, cityInput]);
 
   function toggleCategory(slug) {
     setSelectedCategories((prev) =>
