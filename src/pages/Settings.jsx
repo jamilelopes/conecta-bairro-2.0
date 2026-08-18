@@ -32,6 +32,18 @@ function Settings() {
   const [originalForm, setOriginalForm] = useState(mockProfile);
   const [usingMock, setUsingMock] = useState(false);
   const [availableCategories, setAvailableCategories] = useState([]);
+  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
+  const categoryDropdownRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (categoryDropdownRef.current && !categoryDropdownRef.current.contains(e.target)) {
+        setCategoryDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
   const fileInputRef = useRef(null);
@@ -237,31 +249,62 @@ className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-secondary-contain
                       <input id="registration_number" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.registration_number} onChange={(e) => handleChange("registration_number", e.target.value)} />
                     </div>
                   </div>
-                  <div className="space-y-2 mb-6">
+                  <div className="space-y-2 mb-6" ref={categoryDropdownRef}>
                     <span className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Categorias de Atuação</span>
-                    <div className="flex flex-wrap gap-3 mt-2">
-                      {availableCategories.map((c) => {
-                        const checked = form.categories?.includes(c.slug);
-                        return (
-                          <label
-                            key={c.id}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium cursor-pointer transition-colors ${
-                              checked
-                                ? "bg-primary-container text-white border-primary-container"
-                                : "bg-slate-50 text-on-surface-variant border-slate-200 hover:bg-slate-100"
-                            }`}
-                          >
-                            <input
-                              type="checkbox"
-                              className="hidden"
-                              checked={checked || false}
-                              onChange={() => toggleCategory(c.slug)}
-                            />
-                            {c.name}
-                          </label>
-                        );
-                      })}
+                    <div className="relative">
+                      <button
+                        type="button"
+                        onClick={() => setCategoryDropdownOpen((prev) => !prev)}
+                        className="w-full flex items-center justify-between rounded-xl px-4 py-3 border border-slate-200 bg-slate-50 text-sm text-left cursor-pointer"
+                      >
+                        <span className={form.categories?.length ? "text-on-surface" : "text-on-surface-variant"}>
+                          {form.categories?.length
+                            ? form.categories.length === 1
+                              ? availableCategories.find((c) => c.slug === form.categories[0])?.name
+                              : `${form.categories.length} categorias selecionadas`
+                            : "Selecione as categorias"}
+                        </span>
+                        <span className="material-symbols-outlined text-lg text-on-surface-variant" aria-hidden="true">
+                          {categoryDropdownOpen ? "expand_less" : "expand_more"}
+                        </span>
+                      </button>
+
+                      {categoryDropdownOpen && (
+                        <div className="absolute z-10 mt-2 w-full max-h-64 overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-lg p-2">
+                          {availableCategories.map((c) => {
+                            const checked = form.categories?.includes(c.slug);
+                            return (
+                              <label
+                                key={c.id}
+                                className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-50 cursor-pointer text-sm"
+                              >
+                                <input
+                                  type="checkbox"
+                                  className="w-4 h-4 rounded border-slate-300 text-primary"
+                                  checked={checked || false}
+                                  onChange={() => toggleCategory(c.slug)}
+                                />
+                                {c.name}
+                              </label>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
+
+                    {form.categories?.length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {form.categories.map((slug) => {
+                          const category = availableCategories.find((c) => c.slug === slug);
+                          if (!category) return null;
+                          return (
+                            <span key={slug} className="text-[10px] font-semibold bg-orange-50 text-orange-700 px-2.5 py-1 rounded-full">
+                              {category.name}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                   <div className="space-y-2 mb-6">
                     <label htmlFor="description" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Sobre Você</label>
