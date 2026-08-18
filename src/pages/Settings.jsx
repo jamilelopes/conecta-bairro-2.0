@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { getMyProfile, updateMyProfile } from "../services/professionalsService";
 import { clearAuthTokens } from "../services/auth";
+import { useUnsavedChanges } from "../contexts/UnsavedChangesContext";
 
 const mockProfile = {
   name: "Marcos Silva",
@@ -40,6 +41,12 @@ function Settings() {
   }, []);
 
   const isDirty = JSON.stringify(form) !== JSON.stringify(originalForm);
+  const { setIsDirty, guardNavigate } = useUnsavedChanges();
+
+  useEffect(() => {
+    setIsDirty(isDirty);
+    return () => setIsDirty(false);
+  }, [isDirty, setIsDirty]);
 
   function handleChange(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -96,13 +103,14 @@ function Settings() {
               </div>
 
               {form.slug && (
-                <Link
-                  to={`/profile/${form.slug}`}
-                  className="flex items-center gap-3 px-4 py-3.5 rounded-2xl text-on-surface-variant hover:bg-surface-container-low transition-colors"
+                <button
+                  type="button"
+                  onClick={() => guardNavigate(`/profile/${form.slug}`)}
+                  className="flex items-center gap-3 px-4 py-3.5 rounded-2xl text-on-surface-variant hover:bg-surface-container-low transition-colors w-full text-left"
                 >
                   <span className="material-symbols-outlined" aria-hidden="true">visibility</span>
                   <span className="font-semibold">Ver Perfil Público</span>
-                </Link>
+                </button>
               )}
             </div>
           </nav>
@@ -233,15 +241,15 @@ className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-secondary-contain
                 )}
 
                 <div className="pt-8 border-t border-slate-100 flex justify-between items-center gap-4">
-                  <button type="button" onClick={handleLogout} className="px-8 py-3 rounded-full font-semibold text-slate-500 hover:bg-slate-100">
+                  <button type="button" onClick={handleLogout} className="px-8 py-3 rounded-full font-semibold text-slate-500 hover:bg-slate-100 cursor-pointer">
                     Sair da Conta
                   </button>
                   <div className="flex gap-4">
-                    <button type="button" onClick={handleDiscard} disabled={!isDirty} className={`px-8 py-3 rounded-full font-semibold transition-colors ${isDirty ? "text-primary hover:bg-slate-100" : "text-slate-300 cursor-not-allowed"}`}>
+                    <button type="button" onClick={handleDiscard} disabled={!isDirty} className={`px-8 py-3 rounded-full font-semibold transition-colors ${isDirty ? "text-primary hover:bg-slate-100 cursor-pointer" : "text-slate-300 cursor-not-allowed"}`}>
                       Descartar Alterações
                     </button>
-                    <button type="submit" disabled={saving || !isDirty} className="px-10 py-3 rounded-full font-bold bg-secondary-container text-on-secondary-container shadow-lg hover:scale-105 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
-                      {saving ? "Salvando..." : "Salvar Perfil"}
+                    <button type="submit" disabled={saving || !isDirty} className={`px-10 py-3 rounded-full font-bold bg-secondary-container text-on-secondary-container shadow-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed ${!saving && isDirty ? "hover:scale-105 cursor-pointer" : ""}`}>
+                      {saving ? "Salvando..." : "Salvar Perfil "}
                     </button>
                   </div>
                 </div>
