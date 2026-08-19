@@ -69,6 +69,19 @@ export async function getMyProfile() {
   return response.json();
 }
 
+export async function uploadAvatar(file) {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await authFetch(`${API_BASE_URL}/upload/avatar`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) throw new Error("Erro ao enviar foto");
+  return response.json();
+}
+
 export async function updateMyProfile(data) {
   const response = await authFetch(`${API_BASE_URL}/professionals/me`, {
     method: "PUT",

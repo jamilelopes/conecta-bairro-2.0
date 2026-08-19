@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import { getMyProfile, updateMyProfile, getCategories } from "../services/professionalsService";
+import { getMyProfile, updateMyProfile, getCategories, uploadAvatar } from "../services/professionalsService";
+import { API_BASE_URL } from "../services/api";
 import { clearAuthTokens } from "../services/auth";
 import { useUnsavedChanges } from "../contexts/UnsavedChangesContext";
 
@@ -97,9 +98,17 @@ function Settings() {
   function handlePhotoChange(e) {
     const file = e.target.files?.[0];
     if (!file) return;
+
     const previewUrl = URL.createObjectURL(file);
     handleChange("avatar_url", previewUrl);
-    // TODO: no futuro, enviar o arquivo de verdade para o back-end (upload real)
+
+    uploadAvatar(file)
+      .then((data) => {
+        handleChange("avatar_url", `${API_BASE_URL}${data.avatarUrl}`);
+      })
+      .catch(() => {
+        setSaveMessage("Não foi possível enviar a foto agora.");
+      });
   }
 
   function handleLogout() {

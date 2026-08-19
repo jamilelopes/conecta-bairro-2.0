@@ -8,6 +8,7 @@ import os
 import uuid
 import unicodedata
 import re
+from werkzeug.utils import secure_filename
 
 api = Blueprint('api', __name__, url_prefix='/')
 
@@ -432,6 +433,37 @@ def get_my_professional_profile(current_user):
 
     return jsonify(serialize_professional(professional, include_full=True)), 200
 
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'webp', 'gif'}
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@api.route('/upload/avatar', methods=['POST'])
+@token_required
+def upload_avatar(current_user):
+    if 'file' not in request.files:
+        return jsonify({'code': 'INVALID_REQUEST', 'message': 'No file provided'}), 400
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return jsonify({'code': 'INVALID_REQUEST', 'message': 'No file selected'}), 400
+
+    if not allowed_file(file.filename):
+        return jsonify({'code': 'INVALID_REQUEST', 'message': 'File type not allowed'}), 400
+
+    extension = file.filename.rsplit('.', 1)[1].lower()
+    new_filename = f"{generate_uuid()}.{extension}"
+
+    upload_folder = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static', 'uploads')
+    os.makedirs(upload_folder, exist_ok=True)
+    file.save(os.path.join(upload_folder, new_filename))
+
+    avatar_url = f"/static/uploads/{new_filename}"
+
+    return jsonify({'avatarUrl': avatar_url}), 200
 
 @api.route('/professionals/me', methods=['PUT'])
 @token_required
@@ -469,6 +501,9 @@ def update_my_professional_profile(current_user):
         professional.street = data['street']
     if 'number' in data:
         professional.number = data['number']
+    if 'avatar_url' in data:
+        professional.avatar_url = data['avatar_url']
+        current_user.avatar_url = data['avatar_url']
     if 'registrationNumber' in data:
         professional.registration_number = data['registrationNumber']
     if 'registration_number' in data:
