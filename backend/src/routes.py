@@ -568,7 +568,7 @@ def search_professionals():
     elif sort == 'featured':
         query = query.order_by(Professional.featured.desc(), Professional.rating.desc())
     else:
-        query = query.order_by(Professional.rating.desc(), Professional.reviews_count.desc())
+        query = query.order_by(Professional.created_at.desc())
 
     result = paginate_query(query, page, limit)
 
