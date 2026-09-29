@@ -43,6 +43,10 @@ function Profile() {
     .filter(Boolean)
     .join(", ");
 
+  const mapsQuery = encodeURIComponent(address || (professional.city + " - " + professional.state));
+
+  const mapsEmbedUrl = "https://maps.google.com/maps?q=" + mapsQuery + "&output=embed";
+
   const whatsappMessage = encodeURIComponent(
     "Ola " + professional.name + ", vi seu perfil no Conecta Bairro e gostaria de solicitar um orcamento."
   );
@@ -95,6 +99,17 @@ function Profile() {
                   <p className="text-sm text-on-surface-variant/90 font-medium">{address}</p>
                 </div>
               </div>
+            </section>
+
+            <section className="rounded-2xl overflow-hidden shadow-sm border border-surface-container-high">
+              <iframe
+                title={"Localização de " + professional.name}
+                src={mapsEmbedUrl}
+                width="100%"
+                height="300"
+                style={{ border: 0 }}
+                loading="lazy"
+              ></iframe>
             </section>
 
             <section className="bg-primary-container p-8 rounded-2xl text-white shadow-lg">
