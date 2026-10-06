@@ -39,9 +39,9 @@ function Profile() {
       });
   }, [slug]);
 
-  const address = [professional.street, professional.number, professional.district, professional.city, professional.state]
-    .filter(Boolean)
-    .join(", ");
+  const address = professional.hasCommercialAddress
+  ? [professional.street, professional.number, professional.district, professional.city, professional.state].filter(Boolean).join(", ")
+  : [professional.district, professional.city, professional.state].filter(Boolean).join(", ");
 
   const mapsQuery = encodeURIComponent(address || (professional.city + " - " + professional.state));
 
@@ -97,6 +97,11 @@ function Profile() {
                     <p className="text-sm text-on-surface-variant/80 mb-1">Registro: {professional.registration_number}</p>
                   )}
                   <p className="text-sm text-on-surface-variant/90 font-medium">{address}</p>
+                  {!professional.hasCommercialAddress && (
+                    <p className="text-xs text-on-surface-variant/70 mt-1">
+                      Atendimento sem endereço fixo — profissional atua a partir da região indicada
+                    </p>
+                  )}
                 </div>
               </div>
             </section>

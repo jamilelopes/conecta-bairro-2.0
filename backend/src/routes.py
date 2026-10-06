@@ -125,6 +125,7 @@ def serialize_professional(professional, include_full=False):
             'avatar_url': professional.avatar_url,
             'street': professional.street,
             'number': professional.number,
+            'hasCommercialAddress': professional.has_commercial_address,
             'address': {
                 'state': professional.state,
                 'city': professional.city,
@@ -501,6 +502,8 @@ def update_my_professional_profile(current_user):
         professional.street = data['street']
     if 'number' in data:
         professional.number = data['number']
+    if 'hasCommercialAddress' in data:
+        professional.has_commercial_address = data['hasCommercialAddress']
     if 'avatar_url' in data:
         professional.avatar_url = data['avatar_url']
         current_user.avatar_url = data['avatar_url']
