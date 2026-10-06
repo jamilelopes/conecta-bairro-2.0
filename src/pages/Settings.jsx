@@ -16,6 +16,7 @@ const mockProfile = {
   district: "Pinheiros",
   street: "Rua Cardeal Arcoverde",
   number: "1234",
+  hasCommercialAddress: false,
   title: "Arquiteto e Reformas",
   registration_number: "CAU-A123456-7",
   description: "Profissional especializado em reformas residenciais e comerciais com foco em funcionalidade e estetica contemporanea. Mais de 10 anos de experiencia no mercado paulistano.",
@@ -47,6 +48,7 @@ function Settings() {
   }, []);
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
+  const [toastVisible, setToastVisible] = useState(false);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -61,7 +63,7 @@ function Settings() {
       .catch(() => setUsingMock(true));
   }, []);
 
-  const EDITABLE_FIELDS = ["name", "phone", "state", "city", "district", "street", "number", "title", "registration_number", "description", "instagram", "website", "avatar_url"];
+  const EDITABLE_FIELDS = ["name", "phone", "state", "city", "district", "street", "number", "hasCommercialAddress", "title", "registration_number", "description", "instagram", "website", "avatar_url"];
 
   function pickEditable(obj) {
     const picked = {};
@@ -122,6 +124,17 @@ function Settings() {
     if (!window.confirm("Descartar todas as alterações não salvas?")) return;
     setForm(originalForm);
   }
+
+  useEffect(() => {
+    if (!saveMessage) return;
+    setToastVisible(true);
+    const hideTimer = setTimeout(() => setToastVisible(false), 2500);
+    const clearTimer = setTimeout(() => setSaveMessage(""), 3000);
+    return () => {
+      clearTimeout(hideTimer);
+      clearTimeout(clearTimer);
+    };
+  }, [saveMessage]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -226,6 +239,23 @@ className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-secondary-contain
                     <span className="material-symbols-outlined text-base" aria-hidden="true">location_on</span>
                     Endereço
                   </legend>
+
+                  <label htmlFor="hasCommercialAddress" className="flex items-center gap-3 mb-2 cursor-pointer">
+                    <input
+                      id="hasCommercialAddress"
+                      type="checkbox"
+                      className="w-4 h-4 rounded border-slate-300 text-primary"
+                      checked={form.hasCommercialAddress || false}
+                      onChange={(e) => handleChange("hasCommercialAddress", e.target.checked)}
+                    />
+                    <span className="text-sm">
+                      Tenho um endereço comercial onde atendo o público
+                    </span>
+                  </label>
+                  <p className="text-xs text-on-surface-variant mb-6">
+                    Se marcado, seu endereço completo aparece no mapa do seu perfil público. Caso contrário, só bairro e cidade são exibidos.
+                  </p>
+
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 mb-6">
                     <div className="space-y-2">
                       <label htmlFor="state" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Estado</label>
@@ -240,16 +270,19 @@ className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-secondary-contain
                       <input id="district" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.district} onChange={(e) => handleChange("district", e.target.value)} />
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                    <div className="space-y-2">
-                      <label htmlFor="street" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Rua</label>
-                      <input id="street" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.street} onChange={(e) => handleChange("street", e.target.value)} />
+
+                  {form.hasCommercialAddress && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                      <div className="space-y-2">
+                        <label htmlFor="street" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Rua</label>
+                        <input id="street" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.street} onChange={(e) => handleChange("street", e.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="number" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Número</label>
+                        <input id="number" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.number} onChange={(e) => handleChange("number", e.target.value)} />
+                      </div>
                     </div>
-                    <div className="space-y-2">
-                      <label htmlFor="number" className="block text-xs font-semibold uppercase tracking-widest text-on-surface-variant">Número</label>
-                      <input id="number" className="w-full rounded-xl px-4 py-3 border border-slate-200 bg-slate-50" value={form.number} onChange={(e) => handleChange("number", e.target.value)} />
-                    </div>
-                  </div>
+                  )}
                 </fieldset>
 
                 <fieldset className="pt-8 border-t border-slate-100">
@@ -341,7 +374,17 @@ className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-secondary-contain
                 </fieldset>
 
                 {saveMessage && (
-                  <p role="status" className="text-sm text-center text-on-surface-variant">{saveMessage}</p>
+                  <div
+                    role="status"
+                    className={`fixed top-6 right-6 z-50 flex items-center gap-2 bg-primary-container/90 backdrop-blur-sm text-white px-6 py-3 rounded-2xl shadow-lg font-semibold text-sm transition-all duration-300 ${
+                      toastVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"
+                    }`}
+                  >
+                    <span className="material-symbols-outlined text-base" aria-hidden="true">
+                      {saveMessage.includes("sucesso") ? "check_circle" : "error"}
+                    </span>
+                    {saveMessage}
+                  </div>
                 )}
 
                 <div className="pt-8 border-t border-slate-100 flex justify-between items-center gap-4">
